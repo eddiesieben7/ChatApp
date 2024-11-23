@@ -1,0 +1,167 @@
+Test Setup and Request Information
+If you work with the service without the corresponding login being implemented, you can use this test data to implement a test setup. In addition, examples are listed for the various request that can be used as a starting point.
+
+Test Chat Collection
+The service manages various collections. Each collection allows an individual set of users and chat messages that can be exchanged between two usernames. To access this collection you always need the matching ID.
+
+Collection ID: ba1ad2f8-7e88-4ce4-92c2-6399ab16f647
+
+Test Users
+Users has to use there username and password to authentificate at this chat service. The result of this authentification is a token (JWT) which has to be provided in other requests to perform various actions. For easy tests in first place, you can directly use the following tokens without any need of authentification. This test setup provides the following two users.
+
+Tom
+User: Tom
+Password: 12345678
+Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw
+Jerry
+User: Jerry
+Password: 87654321
+Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiSmVycnkiLCJpYXQiOjE3MzIzOTA5NDB9.ifbDo8ZgGMHABrvCM1IGfYHRDRwa1MUl262G5g1Uljw
+User Exists (GET)
+This request asks if a certain username has already been used in this chat collection. No token is required to check whether a user exists. This is a public function and should be used, e. g., in the registration form.
+
+URL: https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/user/<user>
+
+As an example, https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/user/Tom checks whether Tom is already used.
+
+Response
+HTTP-Status-Code 204 if user is used and HTTP-Status-Code 404 if user does not exists.
+
+Example JS-Code
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState == 4) {
+        if(xmlhttp.status == 204) {
+            console.log("Exists");
+        } else if(xmlhttp.status == 404) {
+            console.log("Does not exist");
+        }
+    }
+};
+xmlhttp.open("GET", "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/user/Tom", true);
+xmlhttp.send();
+Note
+If a token is provided with this request and the same user is requested, you will receive all information about the logged-in user.
+
+List Users (GET)
+Returns a list of all users in this collection. This request requires a token to be sent along.
+
+URL: https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/user
+
+Response
+HTTP-Status-Code 200 with JSON-document as payload.
+
+["Tom", "Jerry"]
+Example JS-Code
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        let data = JSON.parse(xmlhttp.responseText);
+        console.log(data);
+    }
+};
+xmlhttp.open("GET", "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/user", true);
+// Add token, e. g., from Tom
+xmlhttp.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw');
+xmlhttp.send();
+List Messages (GET)
+Lists all messages exchanged between the authenticated user and another. This request requires a token to be sent along.
+
+URL: https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/message/<user>
+
+As an example, https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/message/Jerry sends all messages between Jerry and Tom if you use the token from Tom.
+
+Response
+HTTP-Status-Code 200 with JSON-document as payload.
+
+[{msg: "Hello, World!", from: "Tom", time: 0}, {msg: "42", from: "Jerry", time: 1}]
+Example JS-Code
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        let data = JSON.parse(xmlhttp.responseText);
+        console.log(data);
+    }
+};
+xmlhttp.open("GET", "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/message/Jerry", true);
+// Add token, e. g., from Tom
+xmlhttp.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw');
+xmlhttp.send();
+Send Message (POST)
+Send a message to another user. This request requires a token to be sent along and requires the HTTP method POST.
+
+URL: https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/message
+
+Request
+Requires JSON payload in request
+
+{"message": "Example", "to": "Jerry"}
+Response
+HTTP-Status-Code 204 and no payload.
+
+Example JS-Code
+let xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 204) {
+        console.log("done...");
+    }
+};
+xmlhttp.open("POST", "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/message", true);
+xmlhttp.setRequestHeader('Content-type', 'application/json');
+// Add token, e. g., from Tom
+xmlhttp.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw');
+// Create request data with message and receiver
+let data = {
+    message: "Hello?!",
+    to: "Jerry"
+};
+let jsonString = JSON.stringify(data); // Serialize as JSON
+xmlhttp.send(jsonString); // Send JSON-data to server
+List Friends (GET)
+List all current friends with status (accepted or requested)
+
+URL: https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/friend
+
+Response
+HTTP-Status-Code 200.
+
+[{"username": "Jerry", "status": "accepted", "unread": 2}, {"username": "Tick", "status": "requested", "unread": 0}]
+Example JS-Code
+let xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        let data = JSON.parse(xmlhttp.responseText);
+        console.log(data);
+    }
+};
+xmlhttp.open("GET", "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/friend", true);
+xmlhttp.setRequestHeader('Content-type', 'application/json');
+xmlhttp.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw');
+xmlhttp.send();
+Friend Request (POST)
+Create friend request. This will add the requested friend to the friend list of the authentificated user (with state accepted) and to the friend list for the requested user (with state requested).
+
+URL: https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/friend
+
+Request
+Requires JSON payload in request
+
+{"username": "Jerry"}
+Response
+HTTP-Status-Code 204 and no payload.
+
+Example JS-Code
+let xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 204) {
+        console.log("Requested...");
+    }
+};
+xmlhttp.open("POST", "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647/friend", true);
+xmlhttp.setRequestHeader('Content-type', 'application/json');
+xmlhttp.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw');
+let data = {
+    username: "Jerry"
+};
+let jsonString = JSON.stringify(data);
+xmlhttp.send(jsonString);
