@@ -4,35 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
     <div class="content">
-
-        <h1 class="left">Chat with Tom</h1>
+        <h1 class="left">Chat with Unknown</h1>
 
         <a href="friends.html" class="logout"> &lt; Back</a> |
         <a href="friends.html" class="special">Remove Friend</a>
 
         <hr>
 
-        <div class="friendlist">
-            <ul>
-                <li class="listitems"><span class="bold">Tom:</span> Hallo, Welt!</li>
-                <li class="listitems"><span class="bold">Jerry:</span> Wie geht's?</li>
+        <div class="chat-area">
+            <ul class="message-list">
             </ul>
         </div>
 
         <hr>
 
-        <form>
+        <form id="chat-form">
             <div class="bar">
-                <input class="actionbar" type="text" name="message" placeholder="New Message">
-                <div><button class="greybuttonroundaction">Send</button></div>
+                <input type="text" name="message" id="message-input" placeholder="New Message" class="actionbar">
+                <button type="button" id="send-button" class="greybuttonroundaction">Send</button>
             </div>
         </form>
     </div>
-    <script src="main.js"></script> 
+    <script src="chat.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 // URL und Token bereitstellen
-const backendUrl = "https://online-lectures-cs.thi.de/chat/aae9405d-499e-4575-b23e-78e8fecf6386";
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzY2ODk4fQ.PJuol35Gm_n7N8ajsOVI4T9_-pHdBdrYvg0cubpHYFw";
+const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
 const currentUser = "Tom"; // Der aktuell eingeloggte Benutzer
 
 // Nutzer aus der Freundesliste extrahieren

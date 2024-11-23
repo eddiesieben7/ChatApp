@@ -1,65 +1,161 @@
-// Backend-Konfiguration
-const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647"; // Collection ID
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw"; // Token für Tom
+const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
 
-// 1. Chatpartner aus der URL ermitteln
-function getChatPartner() {
-    const url = new URL(window.location.href); // Aktuelle URL analysieren
-    return url.searchParams.get('friend') || "Unknown"; // Fallback auf "Unknown"
+// Prüfen, ob friends.html oder chat.html 
+if (document.querySelector('.friendlist')) {
+    loadFriends();
+    loadFriendRequests();
+    document.getElementById('add-friend-button').addEventListener('click', addFriend);
+} else {
+    const chatPartner = getChatPartner();
+    document.querySelector('h1.left').textContent = `Chat with ${chatPartner}`;
+    loadMessages();
+    // Nachrichten jede Sekunde laden
+    setInterval(loadMessages, 1000);
+    document.querySelector('.greybuttonroundaction').addEventListener('click', () => {
+        const input = document.getElementById('message-input');
+        const message = input.value.trim();
+        if (message) {
+            sendMessage(message);
+            input.value = "";
+        }
+    });
 }
 
-// 2. Chatpartner anzeigen
-const chatPartner = getChatPartner();
-document.querySelector('h1.left').textContent = `Chat with ${chatPartner}`;
-
-// 3. Nachrichten laden
-function loadMessages() {
+// Freunde laden
+function loadFriends() {
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            const messages = JSON.parse(xmlhttp.responseText); // Nachrichten parsen
-            updateMessages(messages);
+            const friends = JSON.parse(xmlhttp.responseText);
+            updateFriendList(friends);
         }
     };
-    xmlhttp.open("GET", `${backendUrl}/message/${chatPartner}`, true); // Nachrichten-Endpunkt
+    xmlhttp.open("GET", `${backendUrl}/friend`, true);
+    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.send();
+}
+// Update Freundesliste 
+function updateFriendList(friends) {
+    const friendList = document.querySelector('.friendlist ul');
+    friendList.innerHTML = "";
+    friends.forEach(friend => {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = `chat.html?friend=${friend.username}`;
+        link.className = "listitems";
+        link.textContent = friend.username;
+
+        li.appendChild(link);
+
+        if (friend.unread > 0) {
+            const span = document.createElement('span');
+            span.className = "pnumber";
+            span.textContent = friend.unread;
+            li.appendChild(span);
+        }
+
+        friendList.appendChild(li);
+    });
+}
+
+// Freundschaftsanfragen laden
+function loadFriendRequests() {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            const requests = JSON.parse(xmlhttp.responseText).filter(req => req.status === "requested");
+            updateFriendRequests(requests);
+        }
+    };
+    xmlhttp.open("GET", `${backendUrl}/friend`, true);
     xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
     xmlhttp.send();
 }
 
-// 4. Nachrichten in die Liste einfügen
-function updateMessages(messages) {
-    const messageList = document.getElementById('message-list');
-    messageList.innerHTML = ""; // Alte Nachrichten entfernen
-    messages.forEach(msg => {
-        const li = document.createElement('li'); // Neues Listenelement erstellen
-        li.textContent = `${msg.from}: ${msg.msg}`; // Absender und Nachricht
-        messageList.appendChild(li); // Nachricht zur Liste hinzufügen
+// Update Freundschaftsanfragen
+function updateFriendRequests(requests) {
+    const requestList = document.querySelector('ol');
+    requestList.innerHTML = "";
+    requests.forEach(req => {
+        const li = document.createElement('li');
+        li.textContent = `Friend Request from ${req.username}`;
+
+        const accept = document.createElement('button');
+        accept.textContent = "Accept";
+        accept.className = "acceptbutton";
+        accept.addEventListener('click', () => respondToRequest(req.username, true));
+
+        const reject = document.createElement('button');
+        reject.textContent = "Reject";
+        reject.className = "rejectbutton";
+        reject.addEventListener('click', () => respondToRequest(req.username, false));
+
+        li.appendChild(accept);
+        li.appendChild(reject);
+        requestList.appendChild(li);
     });
 }
 
-// 5. Nachricht senden
-function sendMessage(content) {
+// Antwort auf Freundschaftsanfrage
+function respondToRequest(username, accept) {
     const xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 204) {
-            loadMessages(); // Nach erfolgreichem Senden Nachrichten neu laden
-        }
-    };
-    xmlhttp.open("POST", `${backendUrl}/message`, true); // POST-Endpoint
-    xmlhttp.setRequestHeader("Content-type", "application/json");
+    xmlhttp.open("POST", `${backendUrl}/friend`, true);
     xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
-    xmlhttp.send(JSON.stringify({ message: content, to: chatPartner })); // Nachricht senden
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(JSON.stringify({ username, status: accept ? "accepted" : "rejected" }));
+    loadFriendRequests();
 }
 
-// 6. Event-Listener für den "Send"-Button
-document.querySelector('.greybuttonroundaction').addEventListener('click', () => {
-    const input = document.getElementById('message-input');
-    const message = input.value.trim(); // Eingabe auslesen und trimmen
-    if (!message) return; // Nichts tun, falls Eingabe leer
-    sendMessage(message); // Nachricht senden
-    input.value = ""; // Eingabefeld zurücksetzen
-});
+// Nachricht senden
+function sendMessage(content) {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", `${backendUrl}/message`, true);
+    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(JSON.stringify({ message: content, to: getChatPartner() }));
+}
 
-// 7. Nachrichten automatisch alle 1 Sekunde laden
-setInterval(loadMessages, 1000); // Nachrichten regelmäßig aktualisieren
-loadMessages(); // Direkt beim Laden der Seite aufrufen
+// Chat-Partner aus URL extrahieren
+function getChatPartner() {
+    return new URLSearchParams(window.location.search).get('friend') || "Unknown";
+}
+
+// Nachrichten laden
+function loadMessages() {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            const messages = JSON.parse(xmlhttp.responseText);
+            updateMessages(messages);
+        }
+    };
+    xmlhttp.open("GET", `${backendUrl}/message/${getChatPartner()}`, true);
+    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.send();
+}
+
+// Nachrichten aktualisieren, wenn neue Nachrichten vorhanden sind
+function updateMessages(messages) {
+    const messageList = document.querySelector('.message-list');
+    messageList.innerHTML = "";
+    messages.forEach(msg => {
+        const li = document.createElement('li');
+        li.textContent = `${msg.from}: ${msg.msg}`;
+        messageList.appendChild(li);
+    });
+}
+
+// Freund hinzufügen
+function addFriend() {
+    const input = document.getElementById('friend-request-name');
+    const username = input.value.trim();
+    if (!username) return;
+
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", `${backendUrl}/friend`, true);
+    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(JSON.stringify({ username }));
+    loadFriends();
+}

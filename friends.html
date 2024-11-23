@@ -1,14 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="en">
+    
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Friends</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+
 </head>
 <body>
     <div class="content">
-        
         <h1 class="left">Friends</h1>
 
         <a class="logout" href="Logout.html">&lt; Logout</a> |  
@@ -18,19 +21,7 @@
 
         <div class="friendlist">
             <ul>
-                    <li><a class="listitems" href="Login.html">Tom</a>
-                        <span class= "pnumber">3</span>
-                    </li>
-
-                    <li><a class="listitems" href="Login.html">Marvin</a>
-                        <span class= "pnumber">1</span>
-                    </li>
-
-                    <li><a class="listitems" href="Login.html">Tick</a>
-                    </li>
-                    
-                    <li><a class="listitems" href="Login.html">Trick</a>
-                    </li>
+            
             </ul>
         </div>
 
@@ -38,27 +29,18 @@
 
         <h2 class="left">New Requests</h2>
         <ol>
-            <li class="listitems">Friend Request from <span class="bold">Track</span>
-                <button class="acceptbutton">Accept</button> 
-                <button class="rejectbutton">Reject</button>
-            </li>
         </ol>
-
         <hr>
-
         <form>
             <div class="bar">
                 <input class="actionbar" placeholder="Add Friend to List" name="friendRequestName" id="friend-request-name" list="friend-selector">
-                 <datalist id="friend-selector"> 
-                    <option>Tom</option> 
-                    <option>Jerry</option>
-                    <option>Franz</option>
-                    <!-- weitere Einträge -->
-                    </datalist>
-                <button type="button" class="greybuttonroundaction">Add</button>
+                <datalist id="friend-selector">
+                </datalist>
+                <button type="button" id="add-friend-button" class="greybuttonroundaction">Add</button>
             </div>
         </form>
     </div>
-    <script src="main.js"></script> 
+
+    <script src="chat.js"></script>
 </body>
 </html>
