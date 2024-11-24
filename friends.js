@@ -83,7 +83,7 @@ function addFriend() {
     // Prüfen, ob Nutzer sich selbst eingibt
     if (username === currentUser) {
         input.classList.add('error'); // Rote Umrandung bei Fehler
-        alert("You cannot add yourself as a friend!");
+        alert("Du kannst dich nicht selbst hinzufügen!");
         return;
     }
 
@@ -91,7 +91,7 @@ function addFriend() {
     const validUsernames = Array.from(document.querySelectorAll('#friend-selector option')).map(opt => opt.value);
     if (!validUsernames.includes(username)) {
         input.classList.add('error'); // Rote Umrandung bei Fehler
-        alert("Invalid username or user is already your friend!");
+        alert("Ungültiger Nutzername/Nutzername bereits vorhanden!");
         return;
     }
 
@@ -100,12 +100,12 @@ function addFriend() {
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4) {
             if (xmlhttp.status === 204) {
-                alert("Friend added successfully!");
+                alert("Freund/in erfolgreich hinzugefügt!");
                 input.value = ""; // Eingabefeld leeren
                 input.classList.remove('error'); // Fehlerstatus entfernen
                 loadFriends(); // Freunde und Auswahlliste aktualisieren
             } else {
-                alert("Error adding friend.");
+                alert("Fehlgeschlagener Versuch jemanden hinzuzufügen.");
             }
         }
     };
