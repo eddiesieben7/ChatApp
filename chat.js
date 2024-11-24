@@ -3,7 +3,7 @@
 const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647";
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
 
-// Chat Partner aus der URL extrahieren
+// Chat Partner aus der URL holen
 function getChatPartner() {
     return new URLSearchParams(window.location.search).get('friend') || "Unknown";
 }
