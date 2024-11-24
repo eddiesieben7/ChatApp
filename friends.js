@@ -8,9 +8,9 @@ function loadFriends() {
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             const friends = JSON.parse(xmlhttp.responseText)
-                .filter(friend => friend.username !== currentUser); // "Tom" herausfiltern
+                .filter(friend => friend.username !== currentUser); // Eingeloggten Nutzer herausfiltern
             updateFriendList(friends);
-            updateDatalist(); // Aktualisiere Auswahlliste basierend auf Freunden
+            updateDatalist();
         }
     };
     xmlhttp.open("GET", `${backendUrl}/friend`, true);
@@ -21,7 +21,7 @@ function loadFriends() {
 // Freundesliste aktualisieren
 function updateFriendList(friends) {
     const friendList = document.querySelector('.friendlist ul');
-    friendList.innerHTML = ""; // Vorherige Inhalte löschen
+    friendList.innerHTML = ""; 
     friends.forEach(friend => {
         const li = document.createElement('li');
         const link = document.createElement('a');
@@ -45,7 +45,7 @@ function updateFriendList(friends) {
 // Alle Nutzer vom Backend laden und in die Auswahlliste einfügen
 function updateDatalist() {
     const datalist = document.getElementById('friend-selector');
-    datalist.innerHTML = ""; // Vorherige Einträge löschen
+    datalist.innerHTML = "";
 
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -54,7 +54,7 @@ function updateDatalist() {
                 .filter(user => user !== currentUser); // "Tom" herausfiltern
             const friends = Array.from(document.querySelectorAll('.friendlist .listitems')).map(el => el.textContent);
 
-            // Filtere Nutzer: nicht aktueller Benutzer und nicht bereits Freund
+            // Filterung für nicht aktueller Benutzer und nicht bereits Freund
             const allowedUsers = users.filter(user => !friends.includes(user));
 
             allowedUsers.forEach(user => {
@@ -76,11 +76,11 @@ function addFriend() {
 
     // Eingabefeld validieren
     if (!username) {
-        input.classList.add('error'); // Rote Umrandung bei leerem Eingabefeld
+        input.classList.add('error'); // Fehleranzeige
         return;
     }
 
-    // Prüfen, ob Nutzer sich selbst eingibt
+    // Prüfen, ob der Nutzer sich selbst eingibt
     if (username === currentUser) {
         input.classList.add('error'); // Rote Umrandung bei Fehler
         alert("Du kannst dich nicht selbst hinzufügen!");
@@ -90,20 +90,20 @@ function addFriend() {
     // Prüfen, ob Nutzer in der Auswahlliste enthalten ist
     const validUsernames = Array.from(document.querySelectorAll('#friend-selector option')).map(opt => opt.value);
     if (!validUsernames.includes(username)) {
-        input.classList.add('error'); // Rote Umrandung bei Fehler
+        input.classList.add('error'); // Fehleranzeige
         alert("Ungültiger Nutzername/Nutzername bereits vorhanden!");
         return;
     }
 
-    // Anfrage zum Hinzufügen eines Freundes senden
+    // Hinzufügen eines Freundes
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4) {
             if (xmlhttp.status === 204) {
                 alert("Freund/in erfolgreich hinzugefügt!");
-                input.value = ""; // Eingabefeld leeren
-                input.classList.remove('error'); // Fehlerstatus entfernen
-                loadFriends(); // Freunde und Auswahlliste aktualisieren
+                input.value = ""; 
+                input.classList.remove('error'); 
+                loadFriends(); 
             } else {
                 alert("Fehlgeschlagener Versuch jemanden hinzuzufügen.");
             }
@@ -115,9 +115,9 @@ function addFriend() {
     xmlhttp.send(JSON.stringify({ username }));
 }
 
-// Event-Listener hinzufügen
+// EventListener 
 if (document.querySelector('.friendlist')) {
-    loadFriends(); // Initiales Laden der Freundesliste
+    loadFriends(); 
     document.getElementById('add-friend-button').addEventListener('click', addFriend);
 }
 
