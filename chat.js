@@ -1,12 +1,11 @@
-
-//URL und Token
+// URL und Token
 const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647";
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
 
 // Chat Partner aus der URL holen
 function getChatPartner() {
-    const url = new URL(window.location.href); 
-    const queryParams = url.searchParams; 
+    const url = new URL(window.location.href);
+    const queryParams = url.searchParams;
     console.log(`Chatpartner: ${queryParams.get("friend")}`);
     return queryParams.get("friend") || "Unknown";
 }
@@ -14,14 +13,30 @@ function getChatPartner() {
 // Nachrichten aktualisieren
 function updateMessages(messages) {
     const messageList = document.querySelector('.message-list');
-    console.log(`Anzahl der Nachrichten: ${messages.length}`);
-    messageList.innerHTML = "";
-    messages.forEach(msg => {
+    messageList.innerHTML = ""; // Liste leeren
+
+    for (let i = 0; i < messages.length; i++) {
+        const msg = messages[i];
+
         const li = document.createElement('li');
-        li.textContent = `${msg.from}: ${msg.msg}`;
+        li.classList.add('message-item');
+
+        // Zeitstempel formatieren
+        const timestamp = new Date(msg.time * 1000);
+        const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        // Zeitstempel-Element
+        const timeText = document.createElement('span');
+        timeText.textContent = `${formattedTime} `;
+        timeText.classList.add('message-time');
+
+        // Nachrichtentext
+        const messageContent = document.createTextNode(`${msg.from}: ${msg.msg}`);
+
+        li.appendChild(timeText);
+        li.appendChild(messageContent);
         messageList.appendChild(li);
-    });
-    console.log("Nachrichtenliste wurde aktualisiert.");
+    }
 }
 
 // Nachrichten laden
@@ -59,7 +74,7 @@ function sendMessage(content) {
     loadMessages();
 }
 
-// Laden der Nachrichten einmal pro Sek. und EventListener (der kein Sumbit-Button ist)
+// Laden der Nachrichten einmal pro Sekunde und EventListener
 if (document.querySelector('.chat-area')) {
     const chatPartner = getChatPartner();
     document.querySelector('h1.left').textContent = `Chat with ${chatPartner}`;

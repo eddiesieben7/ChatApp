@@ -383,8 +383,21 @@ hr {
 }
 
 
-   
-    
+    /*Uhrzeit*/
+    .message-time {
+    color: gray; 
+    font-size: inherit;
+    margin-right: 5px; 
+}
+.message-list {
+    list-style-type: none; 
+    padding: 0;   
+    margin: 0;        
+}
+.message-list li {
+    margin-bottom: 5px; 
+}
+
 
     
 
