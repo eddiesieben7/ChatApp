@@ -1,4 +1,6 @@
 <?php
+
+
 // Model/User.php
 namespace Model;
 use JsonSerializable;
@@ -33,4 +35,6 @@ class User implements JsonSerializable {
         }
         return $user;
     }
+    
 }
+
