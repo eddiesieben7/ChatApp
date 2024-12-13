@@ -36,16 +36,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
     <div class="content">
-        <h1 class="center">Login</h1>
+    <img src="images/chat.png" class="images" alt="Chat Icon">
+        <h1 class="center">Please sign in</h1>
+
         <?php if (!empty($error)): ?>
             <p class="error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
         <form method="POST" action="login.php" class="form">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit" class="bluebutton">Login</button>
+
+            <fieldset class="login">
+            <legend>Login</legend>
+            <div class = "formcontent">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" required><br>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            </fieldset>
+
+            <div class= "extrabuttons">
+
+            <a href="register.php" class="greyroundbutton">Register</a> 
+            <button type="submit" class="blueroundbutton">Login</button>
+            </div>
         </form>
     </div>
 </body>

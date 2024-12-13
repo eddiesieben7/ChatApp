@@ -39,18 +39,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
     <div class="content">
-        <h1 class="center">Register</h1>
+    <img src="images/user.png" class="images" alt="User Icon">
+    <h1 class="center">Register yourself</h1>
+        
         <?php if (!empty($error)): ?>
             <p class="error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
         <form method="POST" action="register.php" class="form">
+        <fieldset class="register">
+        <legend>Register</legend>
+
+        <div class="formcontent">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="formcontent">
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="formcontent">
             <label for="confirm_password">Confirm Password:</label>
             <input type="password" id="confirm_password" name="confirm_password" required>
-            <button type="submit" class="bluebutton">Register</button>
+        </div>
+            </fieldset>
+
+            <div class="extrabuttons">
+                <a href="login.php" class="greyroundbutton">Cancel</a>
+                <button class="blueroundbutton"><a href="Login.php" class="buttontext">Create Account</a></button>
+            </div>
         </form>
     </div>
 </body>

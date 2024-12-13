@@ -1,7 +1,7 @@
 <?php
-require("start.php");
-var_dump($service->login("Tom", "12345678"));
+//require("start.php");
+//var_dump($service->login("Tom", "12345678"));
 
-$_SESSION['user']='Tom';
+//$_SESSION['user']='Tom';
 
 ?>
