@@ -1,34 +1,37 @@
+<?php
+require("start.php");
+
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
+if (!isset($_GET['friend']) || empty($_GET['friend'])) {
+    header("Location: friends.php");
+    exit();
+}
+
+$chatPartner = htmlspecialchars($_GET['friend']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
+    <title>Chat with <?= $chatPartner ?></title>
     <link rel="stylesheet" href="style.css">
+    <script src="js/chat.js" defer></script>
 </head>
 <body>
     <div class="content">
-        <h1 class="left">Chat with Unknown</h1>
-
-        <a href="friends.html" class="logout"> &lt; Back</a> |
-        <a href="friends.html" class="special">Remove Friend</a>
-
-        <hr>
-
-        <div class="chat-area">
-            <ul class="message-list">
-            </ul>
-        </div>
-
-        <hr>
-
+        <h1 class="center">Chat with <?= $chatPartner ?></h1>
+        <ul class="message-list">
+            <!-- Dynamische Nachrichten -->
+        </ul>
         <form id="chat-form">
-            <div class="bar">
-                <input type="text" name="message" id="message-input" placeholder="New Message" class="actionbar">
-                <button type="button" id="send-button" class="greybuttonroundaction">Send</button>
-            </div>
+            <input type="text" id="message-input" placeholder="Type your message..." required>
+            <button type="submit" class="bluebutton">Send</button>
         </form>
     </div>
-    <script src="chat.js"></script>
 </body>
 </html>
