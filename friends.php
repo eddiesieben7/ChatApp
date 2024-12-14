@@ -35,17 +35,12 @@ try {
         <div class="friendlist">
             
             <ul>
-                <?php if (!empty($acceptedFriends)): ?>
-                    <?php foreach ($acceptedFriends as $friend): ?>
+                
                         <li class="friend-item">
-                            <a class="chatitems" href="chat.php?friend=<?= urlencode($friend->getUsername()) ?>">
-                                <?= htmlspecialchars($friend->getUsername()) ?>
-                            </a>
+                            
                         </li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="pcenter">No friends yet.</p>
-                <?php endif; ?>
+                    
+                    
             </ul>
         </div>
 

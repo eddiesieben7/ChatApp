@@ -155,12 +155,4 @@ class HttpClient {
         }
         throw new \Exception('Http status is ' . $status . ': ' . $result);
     }
-    public function test() {
-        try {
-        return HttpClient::get($this->base .'/test.json');
-        } catch(\Exception $e) {
-        error_log($e);
-        }
-        return false;
-        }
 }

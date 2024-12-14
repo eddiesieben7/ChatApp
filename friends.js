@@ -90,39 +90,39 @@ document.addEventListener("DOMContentLoaded", loadUsers);
 //ab hier Aufgabe b2
 // Funktion, um die Freundesliste zu laden und zu aktualisieren
 function loadFriends() {
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            const data = JSON.parse(xmlhttp.responseText);
-            console.log("Daten vom Backend (Freundesliste):", data);
+     let xmlhttp = new XMLHttpRequest();
+     xmlhttp.onreadystatechange = function () {
+         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+             const data = JSON.parse(xmlhttp.responseText);
+             console.log("Daten vom Backend (Freundesliste):", data);
 
-            // Daten analysieren
-            const acceptedFriends = data.filter(friend => friend.status === "accepted");
-            const requests = data.filter(friend => friend.status === "requested");
+             // Daten analysieren
+             const acceptedFriends = data.filter(friend => friend.status === "accepted");
+             const requests = data.filter(friend => friend.status === "requested");
 
-            // Freundesliste aktualisieren
-            const friendListContainer = document.querySelector(".friendlist ul");
+             // Freundesliste aktualisieren
+             const friendListContainer = document.querySelector(".friendlist ul");
             friendListContainer.innerHTML = ""; // Alte Liste löschen
 
             acceptedFriends.forEach(friend => {
-                const li = document.createElement("li");
+                 const li = document.createElement("li");
                 
 
-                // Link für den Freund
-                const link = document.createElement("a");
-                link.classList.add( "listitems");
-                link.setAttribute("href", `chat.php?friend=${friend.username}`);
-                link.textContent = friend.username;
-                li.appendChild(link);
+                 // // Link für den Freund
+                 const link = document.createElement("a");
+                 link.classList.add( "listitems");
+                 link.setAttribute("href", `chat.html?friend=${friend.username}`);
+                 link.textContent = friend.username;
+                 li.appendChild(link);
                 
 
                 // Span für ungelesene Nachrichten
-                if (friend.unread && friend.unread > 0) {
+                 if (friend.unread && friend.unread > 0) {
                     const unreadP = document.createElement("p");
                     unreadP.classList.add("pnumber");
                     unreadP.textContent = ` ${friend.unread}`;
-                    li.appendChild(unreadP);
-                }
+                     li.appendChild(unreadP);
+                 }
 
                 
                 friendListContainer.appendChild(li);

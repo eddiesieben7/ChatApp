@@ -43,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <p class="error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
         <form method="POST" action="login.php" class="form">
+            
 
             <fieldset class="login">
             <legend>Login</legend>
