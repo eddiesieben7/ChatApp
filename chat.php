@@ -56,14 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
             <ul class="message-list">
                 <?php if (!empty($messages)): ?>
                     <?php for ($i = 0; $i < count($messages); $i++): ?>
-                        
                         <li class="chat-item">
-                            
                             <div class="message-content">
-                            
+                                <span class="message-time"><?= date("H:i", intval($messages[$i]->time / 1000)) ?></span>
                                 <span class="bold"><?= htmlspecialchars($messages[$i]->from) ?>:</span>
                                 <?= htmlspecialchars($messages[$i]->msg) ?>
-                                <span class="message-time"><?= date("H:i", intval($messages[$i]->time / 1000)) ?></span>
                             </div>
                         </li>
                     <?php endfor; ?>
@@ -78,9 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
 
         <form method="POST" action="" class="chat-form">
             <div class="bar">
-            <input type="text" name="message" class="chat-input"  placeholder="New Message" class="actionbar" required>
-            <button type="submit" class="greybuttonroundaction">Send</button>
-                </div>
+                <input type="text" name="message" placeholder="New Message" class="actionbar" required>
+                <button type="submit" class="greybuttonroundaction">Send</button>
+            </div>
         </form>
     </div>
 </body>
