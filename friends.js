@@ -111,7 +111,7 @@ function loadFriends() {
                  // // Link für den Freund
                  const link = document.createElement("a");
                  link.classList.add( "listitems");
-                 link.setAttribute("href", `chat.html?friend=${friend.username}`);
+                 link.setAttribute("href", `chat.php?friend=${friend.username}`);
                  link.textContent = friend.username;
                  li.appendChild(link);
                 
