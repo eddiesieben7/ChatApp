@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
         <h1 class="left">Chat with <?= htmlspecialchars($chatPartner) ?></h1>
         <div class="chat-controls">
             <a href="friends.php" class="logout">&lt; Back</a> |
-            <a href="remove_friend.php?friend=<?= urlencode($chatPartner) ?>" class="special">Remove Friend</a>
+            <a href="friends.php?friend=<?= urlencode($chatPartner) ?>" class="special">Remove Friend</a>
         </div>
         <hr>
         <fieldset class="chatbox">
