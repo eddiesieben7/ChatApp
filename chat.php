@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
                     <?php for ($i = 0; $i < count($messages); $i++): ?>
                         <li class="chat-item">
                             <div class="message-content">
-                                <span class="message-time"><?= date("H:i", intval($messages[$i]->time / 1000)) ?></span>
+                                <span class="message-time"><?= date("d.m.Y | H:i", intval($messages[$i]->time / 1000)) ?></span>
                                 <span class="bold"><?= htmlspecialchars($messages[$i]->from) ?>:</span>
                                 <?= htmlspecialchars($messages[$i]->msg) ?>
                             </div>
