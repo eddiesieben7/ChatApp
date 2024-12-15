@@ -177,6 +177,7 @@ input {
     color: white;
     cursor: pointer;
     text-align: center;
+    text-decoration: none;
 }
 
 .greybuttonroundaction {

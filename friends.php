@@ -7,6 +7,29 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
+$error = null;
+
+// Query-Parameter verarbeiten
+if (isset($_GET['action']) && isset($_GET['friend'])) {
+    $action = $_GET['action'];
+    $friend = $_GET['friend'];
+
+    try {
+        if ($action === 'accept') {
+            $service->friendAccept($friend);
+        } elseif ($action === 'reject') {
+            $service->friendDismiss($friend);
+        }
+    } catch (Exception $e) {
+        $error = "Error processing request: " . $e->getMessage();
+    }
+
+    // Nach der Verarbeitung zurück zur Hauptseite, um ein Neuladen der Aktionen zu verhindern
+    header("Location: friends.php");
+    exit();
+}
+
+
 try {
     // Freunde und Freundschaftsanfragen laden
     $friends = $service->loadFriends();
@@ -35,17 +58,11 @@ try {
         <div class="friendlist">
             
             <ul>
-                <?php if (!empty($acceptedFriends)): ?>
-                    <?php foreach ($acceptedFriends as $friend): ?>
+               
                         <li class="friend-item">
-                            <a class="chatitems" href="chat.php?friend=<?= urlencode($friend->getUsername()) ?>">
-                                <?= htmlspecialchars($friend->getUsername()) ?>
-                            </a>
+                            
                         </li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="pcenter">No friends yet.</p>
-                <?php endif; ?>
+                    
             </ul>
         </div>
 

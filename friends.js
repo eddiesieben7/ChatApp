@@ -1,7 +1,7 @@
 // URL und Token bereitstellen
-const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647";
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
-const currentUser = "Tom"; // Der aktuell eingeloggte Benutzer
+// const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647";
+// const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
+// const currentUser = "Tom"; // Der aktuell eingeloggte Benutzer
 
 // Nutzer aus der Freundesliste extrahieren
 const friendList = Array.from(document.querySelectorAll(".friendlist .listitems")).map(el => el.textContent);
@@ -16,8 +16,7 @@ function loadUsers() {
             populateDatalist(data);
         }
     };
-    xmlhttp.open("GET", `${backendUrl}/user`, true);
-    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.open("GET", "ajax_load_friends.php", true); // Aufruf des PHP-Proxys
     xmlhttp.send();
 }
 
@@ -152,26 +151,27 @@ function loadFriends() {
                 li.appendChild(usernameSpan);
         
                 // Buttons für "Accept" und "Reject"
-                const acceptButton = document.createElement("button");
-                acceptButton.classList.add("acceptbutton");
-                acceptButton.textContent = "Accept";
+                const acceptLink = document.createElement("a");
+                acceptLink.href = `friends.php?action=accept&friend=${encodeURIComponent(request.username)}`;
+                acceptLink.classList.add("acceptbutton");
+                acceptLink.textContent = "Accept";
                 
         
-                const rejectButton = document.createElement("button");
-                rejectButton.classList.add("rejectbutton");
-                rejectButton.textContent = "Reject";
+                const rejectLink = document.createElement("a");
+                rejectLink.href = `friends.php?action=reject&friend=${encodeURIComponent(request.username)}`;
+                rejectLink.classList.add("rejectbutton");
+                rejectLink.textContent = "Reject";
                 
         
-                li.appendChild(acceptButton);
-                li.appendChild(rejectButton);
+                li.appendChild(acceptLink);
+                li.appendChild(rejectLink);
                 requestsContainer.appendChild(li);
             });
         
             console.log("Freundschaftsanfragen aktualisiert:", requests);
         }
     };
-    xmlhttp.open("GET", `${backendUrl}/friend`, true);
-    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.open("GET", "ajax_load_friends.php", true); 
     xmlhttp.send();
 }
 
