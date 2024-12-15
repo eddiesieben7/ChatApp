@@ -7,6 +7,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
+
 $error = null;
 
 // Query-Parameter verarbeiten
@@ -48,6 +49,9 @@ try {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+
+
     <div class="content">
         <h1 class="left">Friends</h1>
         <a class="logout" href="logout.php">&lt; Logout</a> |

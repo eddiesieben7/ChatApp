@@ -16,74 +16,73 @@ function loadUsers() {
             populateDatalist(data);
         }
     };
-    xmlhttp.open("GET", "ajax_load_friends.php", true); // Aufruf des PHP-Proxys
+    xmlhttp.open("GET", "ajax_load_friends.php", true); 
     xmlhttp.send();
 }
 
 // Funktion, um datalist mit erlaubten Nutzern zu befüllen
-function populateDatalist(users) {
-        const datalist = document.getElementById("friend-selector");
-        datalist.innerHTML = ""; // Alte Einträge löschen
+// function populateDatalist(users) {
+//         const datalist = document.getElementById("friend-selector");
+//         datalist.innerHTML = ""; // Alte Einträge löschen
 
-         // Freundesliste korrekt extrahieren
-    const friendList = Array.from(document.querySelectorAll(".friendlist .listitems"))
-    .map(el => el.textContent.trim());
-console.log("Freundesliste nach Extraktion:", friendList);
+//          // Freundesliste korrekt extrahieren
+//     const friendList = Array.from(document.querySelectorAll(".friendlist .listitems"))
+//     .map(el => el.textContent.trim());
+// console.log("Freundesliste nach Extraktion:", friendList);
 
-const allowedUsers = users.filter(user => {
-    const isCurrentUser = user === currentUser;
-    const isInFriendList = friendList.some(friend => friend.toLowerCase() === user.toLowerCase());
-    return !isCurrentUser && !isInFriendList;
-});
-console.log("Gefilterte Nutzer:", allowedUsers);
+// const allowedUsers = users.filter(user => {
+//     const isCurrentUser = user === currentUser;
+//     const isInFriendList = friendList.some(friend => friend.toLowerCase() === user.toLowerCase());
+//     return !isCurrentUser && !isInFriendList;
+// });
+// console.log("Gefilterte Nutzer:", allowedUsers);
 
     
 
-    // Optionen zur datalist hinzufügen
-    allowedUsers.forEach(user => {
-        const option = document.createElement("option");
-        option.value = user;
-        datalist.appendChild(option);
-    });
-}
+//     // Optionen zur datalist hinzufügen
+//     allowedUsers.forEach(user => {
+//         const option = document.createElement("option");
+//         option.value = user;
+//         datalist.appendChild(option);
+//     });
+// }
 
-// Funktion, um eine Freundschaftsanfrage zu erstellen
-function sendFriendRequest(username) {
-     //Validierung: Ist der Nutzername in der datalist enthalten?
-    const validUsernames = Array.from(document.querySelectorAll("#friend-selector option")).map(opt => opt.value);
-    if (!validUsernames.includes(username)) {
-        alert("Ungültiger Nutzername oder Nutzer ist bereits Freund!");
-        return;
-    }
+// // Funktion, um eine Freundschaftsanfrage zu erstellen
+// function sendFriendRequest(username) {
+//      //Validierung: Ist der Nutzername in der datalist enthalten?
+//     const validUsernames = Array.from(document.querySelectorAll("#friend-selector option")).map(opt => opt.value);
+//     if (!validUsernames.includes(username)) {
+//         alert("Ungültiger Nutzername oder Nutzer ist bereits Freund!");
+//         return;
+//     }
 
-    // Anfrage senden
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState === 4) {
-            if (xmlhttp.status === 204) {
-                alert("Freundschaftsanfrage erfolgreich gesendet!");
-            } else {
-                alert("Fehler beim Senden der Anfrage.");
-            }
-        }
-    };
-    xmlhttp.open("POST", `${backendUrl}/friend`, true);
-    xmlhttp.setRequestHeader("Content-type", "application/json");
-    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
-    const payload = JSON.stringify({ username });
-    xmlhttp.send(payload);
-}
+//     // Anfrage senden
+//     let xmlhttp = new XMLHttpRequest();
+//     xmlhttp.onreadystatechange = function () {
+//         if (xmlhttp.readyState === 4) {
+//             if (xmlhttp.status === 204) {
+//                 alert("Freundschaftsanfrage erfolgreich gesendet!");
+//             } else {
+//                 alert("Fehler beim Senden der Anfrage.");
+//             }
+//         }
+//     };
+//     xmlhttp.open("GET", "ajax_load_friends.php", true); 
+//     xmlhttp.setRequestHeader("Content-type", "application/json");
+//     xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+//     const payload = JSON.stringify({ username });
+//     xmlhttp.send();}
 
-// Event-Listener für den Add-Button
-document.querySelector(".greybuttonroundaction").addEventListener("click", () => {
-    const input = document.getElementById("friend-request-name");
-    const username = input.value.trim();
-    sendFriendRequest(username);
-    input.value = ""; // Inputfeld zurücksetzen
-});
+// // Event-Listener für den Add-Button
+// document.querySelector(".greybuttonroundaction").addEventListener("click", () => {
+//     const input = document.getElementById("friend-request-name");
+//     const username = input.value.trim();
+//     sendFriendRequest(username);
+//     input.value = ""; // Inputfeld zurücksetzen
+// });
 
-// Nutzer laden, sobald die Seite geladen ist
-document.addEventListener("DOMContentLoaded", loadUsers);
+// // Nutzer laden, sobald die Seite geladen ist
+// document.addEventListener("DOMContentLoaded", loadUsers);
 
 
 //ab hier Aufgabe b2
