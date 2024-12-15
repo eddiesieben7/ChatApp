@@ -13,6 +13,17 @@ if (!isset($_GET['friend']) || empty($_GET['friend'])) {
 }
 
 $chatPartner = htmlspecialchars($_GET['friend']);
+
+// Freund entfernen
+if (isset($_GET['action']) && $_GET['action'] === 'remove-friend') {
+    if ($service->removeFriend($chatPartner)) {
+        header("Location: friends.php");
+        exit();
+    } else {
+        die("Failed to remove friend.");
+    }
+}
+
 $messages = [];
 
 try {
@@ -48,7 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
         <h1 class="left">Chat with <?= htmlspecialchars($chatPartner) ?></h1>
         <div class="chat-controls">
             <a href="friends.php" class="logout">&lt; Back</a> |
-            <a href="friends.php?friend=<?= urlencode($chatPartner) ?>" class="special">Remove Friend</a>
+            <a href="chat.php?action=remove-friend&friend=<?= urlencode($chatPartner) ?>" class="special">Remove Friend
+            <script src="removefriend.js"></script> 
+            </a>
         </div>
         <hr>
         <fieldset class="chatbox">
