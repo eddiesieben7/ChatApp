@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="content">
         <img src="images/user.png" class="images" alt="User Icon">
         <h1 class="center">Register yourself</h1>
-        
+
         <?php if (!empty($error)): ?>
             <p class="error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>

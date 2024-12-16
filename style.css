@@ -260,15 +260,15 @@ li {
     font-weight: 400;
     font-size: 1em;
     margin: 15px 0;
-    
-    
+
+
 }
 /* Zählerbereich */
 .friend-item {
     justify-content: space-between; 
     align-items: center; 
-    
-    
+
+
 }
 .friend-name {
     font-size: 1em;
@@ -366,7 +366,7 @@ hr {
 .error {
     border: 2px solid red;
 }
-   
+
     /*Uhrzeit*/
     .message-time {
         color: gray; 
@@ -381,7 +381,6 @@ hr {
     .message-list li {
         margin-bottom: 5px; 
     }
-
     .no-messages {
         text-align: center;
         color: gray;

@@ -1,5 +1,4 @@
 const backendURL = "ajax_check_user.php";
-
 // Funktion zur Prüfung, ob der Benutzername existiert
 function userExists(name) {
     return new Promise((resolve, reject) => {
@@ -20,7 +19,6 @@ function userExists(name) {
         xmlhttp.send();
     });
 }
-
 // Event-Listener für die Formularvalidierung
 window.onload = function () {
     const usernameInput = document.querySelector('input[name="username"]');
@@ -34,7 +32,6 @@ window.onload = function () {
             usernameInput.classList.remove('input-invalid');
         }
     });
-
     passwordInput.addEventListener('input', function () {
         if (passwordInput.value.length < 8) {
             passwordInput.classList.add('input-invalid');
@@ -42,7 +39,6 @@ window.onload = function () {
             passwordInput.classList.remove('input-invalid');
         }
     });
-
     confirmInput.addEventListener('input', function () {
         if (passwordInput.value !== confirmInput.value) {
             confirmInput.classList.add('input-invalid');
@@ -50,15 +46,12 @@ window.onload = function () {
             confirmInput.classList.remove('input-invalid');
         }
     });
-
     document.getElementById('register-button').addEventListener('click', async function (event) {
         event.preventDefault();
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
         const confirmPassword = confirmInput.value.trim();
-
         let valid = true;
-
         // Lokale Validierungen
         if (username.length < 3) {
             alert('Username must be at least 3 characters long.');
@@ -72,7 +65,6 @@ window.onload = function () {
             alert('Passwords do not match!');
             valid = false;
         }
-
         // Überprüfung, ob der Benutzername existiert
         if (valid) {
             try {
@@ -87,7 +79,6 @@ window.onload = function () {
                 valid = false;
             }
         }
-
         // Registrierung abschicken, wenn alles gültig ist
         if (valid) {
             document.getElementById('register-form').submit();

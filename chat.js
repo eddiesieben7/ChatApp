@@ -1,4 +1,4 @@
-// URL und Token bereitstellen
+// URL und Token
 const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647";
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
 
@@ -53,9 +53,12 @@ function loadMessages() {
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            const data = JSON.parse(xmlhttp.responseText);
-            console.log("Alle Nutzer vom Backend:", data);
-            populateDatalist(data);
+            try {
+                const messages = JSON.parse(xmlhttp.responseText);
+                updateMessages(messages);
+            } catch (e) {
+                console.error("Error parsing messages:", e);
+            }
         }
     };
     xmlhttp.open("GET", `ajax_load_messages.php?to=${chatPartner}`, true);
@@ -69,12 +72,8 @@ function sendMessage(content) {
     xmlhttp.open("POST", "ajax_send_message.php", true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState === 4) {
-            if (xmlhttp.status === 204) {
-                alert("Freundschaftsanfrage erfolgreich gesendet!");
-            } else {
-                alert("Fehler beim Senden der Anfrage.");
-            }
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            loadMessages(); // Nachrichten neu laden
         }
     };
     xmlhttp.send(JSON.stringify({ to: chatPartner, message: content }));
@@ -95,7 +94,5 @@ if (document.querySelector('.chat-area')) {
             sendMessage(input.value.trim());
             input.value = ""; // Eingabefeld leeren
         }
-    };
-    xmlhttp.open("GET", "ajax_load_friends.php", true); 
-    xmlhttp.send();
+    });
 }
