@@ -1,28 +1,34 @@
 <?php
 require("start.php");
 
-$error = "";
+$error = ""; // Variable zur Speicherung von Fehlermeldungen
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    
     $username = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
     $confirmPassword = trim($_POST['confirm_password'] ?? '');
 
-    if (strlen($username) < 3) {
+    // Serverseitige Validierung
+    if (empty($username)) {
+        $error = "Username is required.";
+    } elseif (strlen($username) < 3) {
         $error = "Username must be at least 3 characters long.";
+    } elseif ($service->userExists($username)) { // Benutzername auf Existenz prüfen
+        $error = "Username already exists.";
+    } elseif (empty($password)) {
+        $error = "Password is required.";
     } elseif (strlen($password) < 8) {
         $error = "Password must be at least 8 characters long.";
     } elseif ($password !== $confirmPassword) {
-        $error = "Passwords do not match!";
-    } elseif ($service->userExists($username)) {
-        $error = "Username already exists.";
+        $error = "Passwords do not match.";
     } else {
-        
-    if ($service->register($username, $password)) {
-            $_SESSION['user'] = $username;
-            header("Location: friends.php");
+        // Wenn alle Eingaben korrekt sind, Benutzer registrieren
+        if ($service->register($username, $password)) {
+            $_SESSION['user'] = $username; // Benutzername in der Session speichern
+            header("Location: friends.php"); // Weiterleitung zur Freundesliste
             exit();
-    } else {
+        } else {
             $error = "Registration failed. Please try again.";
         }
     }
