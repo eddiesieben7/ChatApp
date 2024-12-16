@@ -9,19 +9,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $confirmPassword = $_POST['confirm_password'] ?? '';
 
     if (!empty($username) && !empty($password) && $password === $confirmPassword) {
-        if (strlen($username) >= 3 && strlen($password) >= 8) {
-            if (!$service->userExists($username)) { 
-                if ($service->register($username, $password)) { 
+    if (strlen($username) >= 3 && strlen($password) >= 8) {
+    if (!$service->userExists($username)) { 
+    if ($service->register($username, $password)) { 
                     $_SESSION['user'] = $username; 
                     header("Location: friends.php"); 
                     exit();
-                } else {
+    } else {
                     $error = "Registration failed due to a server error. Please try again.";
                 }
-            } else {
+    } else {
                 $error = "Username already exists.";
             }
-        } else {
+    } else {
             $error = "Invalid input: username must be at least 3 characters, password at least 8 characters.";
         }
     } else {
