@@ -12,8 +12,13 @@ function getChatPartner() {
 function updateMessages(messages) {
     const messageList = document.querySelector('.message-list');
     if (!messageList) return;
+
+    // Nachrichtenliste leeren
     messageList.innerHTML = "";
-    messages.forEach(msg => {
+
+    // Mit klassischer `for`-Schleife durch die Nachrichten iterieren
+    for (let i = 0; i < messages.length; i++) {
+        const msg = messages[i];
         const li = document.createElement('li');
         li.className = "chat-item";
         li.innerHTML = `
@@ -24,49 +29,41 @@ function updateMessages(messages) {
             </div>
         `;
         messageList.appendChild(li);
-    });
+    }
 }
 
 // Nachrichten laden
-async function loadMessages() {
+function loadMessages() {
     const chatPartner = getChatPartner();
-    try {
-        const response = await fetch(`${backendUrl}/message/${chatPartner}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            try {
+                const messages = JSON.parse(xmlhttp.responseText);
+                updateMessages(messages);
+            } catch (e) {
+                console.error("Error parsing messages:", e);
             }
-        });
-        if (response.ok) {
-            const messages = await response.json();
-            updateMessages(messages);
-        } else {
-            console.error("Failed to load messages:", response.statusText);
         }
-    } catch (err) {
-        console.error("Error loading messages:", err);
-    }
+    };
+    xmlhttp.open("GET", `${backendUrl}/message/${chatPartner}`, true);
+    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.send();
 }
 
 // Nachrichten senden
-async function sendMessage(content) {
+function sendMessage(content) {
     const chatPartner = getChatPartner();
-    try {
-        const response = await fetch(`${backendUrl}/message`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ message: content, to: chatPartner })
-        });
-        if (response.ok) {
-            loadMessages();
-        } else {
-            console.error("Failed to send message:", response.statusText);
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", `${backendUrl}/message`, true);
+    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            loadMessages(); // Nachrichten neu laden
         }
-    } catch (err) {
-        console.error("Error sending message:", err);
-    }
+    };
+    xmlhttp.send(JSON.stringify({ message: content, to: chatPartner }));
 }
 
 // Initialisierung
@@ -74,15 +71,15 @@ if (document.querySelector('.chat-area')) {
     const chatPartner = getChatPartner();
     const chatHeader = document.querySelector('h1.left');
     if (chatHeader) chatHeader.textContent = `Chat with ${chatPartner}`;
-    loadMessages();
-    setInterval(loadMessages, 1000);
+    loadMessages(); // Nachrichten beim Laden der Seite abrufen
+    setInterval(loadMessages, 1000); // Nachrichten jede Sekunde aktualisieren
 
-    document.querySelector('.greybuttonroundaction').addEventListener('click', (e) => {
+    document.querySelector('.greybuttonroundaction').addEventListener('click', function (e) {
         e.preventDefault();
         const input = document.getElementById('message-input');
         if (input && input.value.trim()) {
             sendMessage(input.value.trim());
-            input.value = "";
+            input.value = ""; // Eingabefeld leeren
         }
     });
 }
