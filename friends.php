@@ -1,11 +1,15 @@
 <?php
+
+
 require("start.php");
 
 // Überprüfen, ob der Nutzer angemeldet ist
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']['username'])) {
     header("Location: login.php");
     exit();
 }
+
+$currentUser = $_SESSION['user']['username'];
 
 $error = "";
 
@@ -50,7 +54,7 @@ try {
     <link rel="stylesheet" href="style.css">
 
     <script>
-    const currentUser = <?= json_encode($_SESSION['user']); ?>;
+    const currentUser = <?= json_encode($_SESSION['user']['username']); ?>;
 </script>
 
 </head>
@@ -59,7 +63,9 @@ try {
 
 
     <div class="content">
-        <h1 class="left">Friends</h1>
+    <h1 class="left">
+            <?= htmlspecialchars($_SESSION['user']['username']) ?>'s Friends
+        </h1>
         <a class="logout" href="logout.php">&lt; Logout</a> |
         <a class="text" href="Login.php">Settings</a>
         <hr>
@@ -88,11 +94,7 @@ try {
                 <input 
                     class="actionbar" placeholder="Add Friend to List" name="friendRequestName" id="friend-request-name" list="friend-selector">
                 <datalist id="friend-selector"> 
-                <?php foreach ($usersList as $user): ?>
-                        <option value="<?= htmlspecialchars($user['username']) ?>">
-                            <?= htmlspecialchars($user['username']) ?>
-                        </option>
-                    <?php endforeach; ?>
+                
                 
                     
                 </datalist>
