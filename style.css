@@ -381,3 +381,10 @@ hr {
     .message-list li {
         margin-bottom: 5px; 
     }
+
+    .no-messages {
+        text-align: center;
+        color: gray;
+        font-style: italic;
+        margin: auto 0; /* Zentriert die Nachricht vertikal */
+    }

@@ -61,24 +61,22 @@ function loadMessages() {
             }
         }
     };
-    xmlhttp.open("GET", `${backendUrl}/message/${chatPartner}`, true);
-    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.open("GET", `ajax_load_messages.php?to=${chatPartner}`, true);
     xmlhttp.send();
 }
 
-// Nachrichten senden
+// Nachricht senden
 function sendMessage(content) {
     const chatPartner = getChatPartner();
     const xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", `${backendUrl}/message`, true);
-    xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+    xmlhttp.open("POST", "ajax_send_message.php", true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             loadMessages(); // Nachrichten neu laden
         }
     };
-    xmlhttp.send(JSON.stringify({ message: content, to: chatPartner }));
+    xmlhttp.send(JSON.stringify({ to: chatPartner, message: content }));
 }
 
 // Initialisierung
