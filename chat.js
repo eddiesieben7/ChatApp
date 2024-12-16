@@ -32,7 +32,11 @@ function updateMessages(messages) {
         // Zeitstempel
         const time = document.createElement('span');
         time.className = "message-time";
-        time.textContent = msg.time;
+
+        // Zeitstempel formatieren (UNIX-Zeit in lesbares Format umwandeln)
+        const timestamp = parseInt(msg.time, 10); // Sicherstellen, dass es eine Zahl ist
+        const date = new Date(timestamp > 10 ** 12 ? timestamp : timestamp * 1000); // Falls Millisekunden fehlen
+        time.textContent = date.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
         // Nachricht
         const content = document.createElement('span');
