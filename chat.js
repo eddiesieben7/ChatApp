@@ -16,7 +16,7 @@ function updateMessages(messages) {
     // Nachrichtenliste leeren
     messageList.innerHTML = "";
 
-    // Mit klassischer `for`-Schleife durch die Nachrichten iterieren
+    // Mit klassischer for-Schleife durch die Nachrichten iterieren
     for (let i = 0; i < messages.length; i++) {
         const msg = messages[i];
         const li = document.createElement('li');

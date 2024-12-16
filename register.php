@@ -4,28 +4,27 @@ require("start.php");
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-    $confirmPassword = $_POST['confirm_password'] ?? '';
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    $confirmPassword = trim($_POST['confirm_password'] ?? '');
 
-    if (!empty($username) && !empty($password) && $password === $confirmPassword) {
-    if (strlen($username) >= 3 && strlen($password) >= 8) {
-    if (!$service->userExists($username)) { 
-    if ($service->register($username, $password)) { 
-                    $_SESSION['user'] = $username; 
-                    header("Location: friends.php"); 
-                    exit();
+    if (strlen($username) < 3) {
+        $error = "Username must be at least 3 characters long.";
+    } elseif (strlen($password) < 8) {
+        $error = "Password must be at least 8 characters long.";
+    } elseif ($password !== $confirmPassword) {
+        $error = "Passwords do not match!";
+    } elseif ($service->userExists($username)) {
+        $error = "Username already exists.";
     } else {
-                    $error = "Registration failed due to a server error. Please try again.";
-                }
+        
+    if ($service->register($username, $password)) {
+            $_SESSION['user'] = $username;
+            header("Location: friends.php");
+            exit();
     } else {
-                $error = "Username already exists.";
-            }
-    } else {
-            $error = "Invalid input: username must be at least 3 characters, password at least 8 characters.";
+            $error = "Registration failed. Please try again.";
         }
-    } else {
-        $error = "Passwords do not match or fields are missing.";
     }
 }
 ?>
@@ -47,30 +46,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php endif; ?>
 
         <form method="POST" action="register.php" class="form">
-            <fieldset class="register">
-                <legend>Register</legend>
-                <div class="formcontent">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-
-                <div class="formcontent">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-
-                <div class="formcontent">
-                    <label for="confirm_password">Confirm Password:</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
-                </div>
-            </fieldset>
-
-            <div class="extrabuttons">
-                <a href="login.php" class="greyroundbutton">Cancel</a>
-                <button type="submit" class="blueroundbutton">Create Account</button>
+        <fieldset class="register">
+            <legend>Register</legend>
+            <div class="formcontent">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
             </div>
-        </form>
-    </div>
+
+            <div class="formcontent">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="formcontent">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+        </fieldset>
+
+        <div class="extrabuttons">
+            <a href="login.php" class="greyroundbutton">Cancel</a>
+            <button type="submit" class="blueroundbutton">Create Account</button>
+        </div>
+    </form>
+</div>
 
     <script src="register.js"></script>
 </body>

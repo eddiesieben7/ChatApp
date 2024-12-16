@@ -1,16 +1,20 @@
 document.querySelector('form').addEventListener('submit', function(event) {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm_password').value;
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const confirmPassword = document.getElementById('confirm_password').value.trim();
+
+    let errorMessage = "";
 
     if (username.length < 3) {
-        alert('Username must be at least 3 characters long.');
-        event.preventDefault();
+        errorMessage = "Username must be at least 3 characters long.";
     } else if (password.length < 8) {
-        alert('Password must be at least 8 characters long.');
-        event.preventDefault();
+        errorMessage = "Password must be at least 8 characters long.";
     } else if (password !== confirmPassword) {
-        alert('Passwords do not match!');
+        errorMessage = "Passwords do not match!";
+    }
+
+    if (errorMessage) {
+        alert(errorMessage);
         event.preventDefault();
     }
 });
