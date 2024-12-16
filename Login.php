@@ -7,6 +7,8 @@ if (isset($_SESSION['user'])) {
     exit();
 }
 
+
+
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -15,16 +17,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (!empty($username) && !empty($password)) {
         if ($service->login($username, $password)) {
-            $_SESSION['user'] = $username;
+            $_SESSION['user'] = ['username' => $username];  // Speichere ein Array in der Session
             header("Location: friends.php");
             exit();
+        }
         } else {
             $error = "Invalid username or password.";
         }
     } else {
         $error = "Please fill in all fields.";
     }
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

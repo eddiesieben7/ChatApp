@@ -1,7 +1,7 @@
 // URL und Token bereitstellen
 // const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647";
 // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
-// const currentUser = "Tom"; // Der aktuell eingeloggte Benutzer
+//const currentUser = "Tom"; // Der aktuell eingeloggte Benutzer
 
 // Nutzer aus der Freundesliste extrahieren
 const friendList = Array.from(document.querySelectorAll(".friendlist .listitems")).map(el => el.textContent);
@@ -16,73 +16,58 @@ function loadUsers() {
             populateDatalist(data);
         }
     };
-    xmlhttp.open("GET", "ajax_load_friends.php", true); 
+    xmlhttp.open("GET", "ajax_load_users.php", true); 
     xmlhttp.send();
 }
 
 // Funktion, um datalist mit erlaubten Nutzern zu befüllen
-// function populateDatalist(users) {
-//         const datalist = document.getElementById("friend-selector");
-//         datalist.innerHTML = ""; // Alte Einträge löschen
+function populateDatalist(users) {
+    const datalist = document.getElementById("friend-selector");
+    datalist.innerHTML = ""; // Alte Einträge löschen
 
-//          // Freundesliste korrekt extrahieren
-//     const friendList = Array.from(document.querySelectorAll(".friendlist .listitems"))
-//     .map(el => el.textContent.trim());
-// console.log("Freundesliste nach Extraktion:", friendList);
+    // Filtere den aktuellen Benutzer aus
+    const allowedUsers = users.filter(user => user !== currentUser);
 
-// const allowedUsers = users.filter(user => {
-//     const isCurrentUser = user === currentUser;
-//     const isInFriendList = friendList.some(friend => friend.toLowerCase() === user.toLowerCase());
-//     return !isCurrentUser && !isInFriendList;
-// });
-// console.log("Gefilterte Nutzer:", allowedUsers);
+    allowedUsers.forEach(user => {
+        const option = document.createElement("option");
+        option.value = user;
+        datalist.appendChild(option);
+    });
+}
 
-    
+// Funktion, um eine Freundschaftsanfrage zu erstellen
+function sendFriendRequest(username) {
+     //Validierung: Ist der Nutzername in der datalist enthalten?
+    const validUsernames = Array.from(document.querySelectorAll("#friend-selector option")).map(opt => opt.value);
+    if (!validUsernames.includes(username)) {
+        alert("Ungültiger Nutzername oder Nutzer ist bereits Freund!");
+        return;
+    }
 
-//     // Optionen zur datalist hinzufügen
-//     allowedUsers.forEach(user => {
-//         const option = document.createElement("option");
-//         option.value = user;
-//         datalist.appendChild(option);
-//     });
-// }
+    // Anfrage senden
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4) {
+            if (xmlhttp.status === 204) {
+                alert("Freundschaftsanfrage erfolgreich gesendet!");
+            } 
+        }
+    };
+    xmlhttp.open("POST", "ajax_friend_action.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send(`action=add&friend=${encodeURIComponent(username)}`);
+}
 
-// // Funktion, um eine Freundschaftsanfrage zu erstellen
-// function sendFriendRequest(username) {
-//      //Validierung: Ist der Nutzername in der datalist enthalten?
-//     const validUsernames = Array.from(document.querySelectorAll("#friend-selector option")).map(opt => opt.value);
-//     if (!validUsernames.includes(username)) {
-//         alert("Ungültiger Nutzername oder Nutzer ist bereits Freund!");
-//         return;
-//     }
+// Event-Listener für den Add-Button
+document.querySelector(".greybuttonroundaction").addEventListener("click", () => {
+    const input = document.getElementById("friend-request-name");
+    const username = input.value.trim();
+    sendFriendRequest(username);
+    input.value = ""; // Inputfeld zurücksetzen
+});
 
-//     // Anfrage senden
-//     let xmlhttp = new XMLHttpRequest();
-//     xmlhttp.onreadystatechange = function () {
-//         if (xmlhttp.readyState === 4) {
-//             if (xmlhttp.status === 204) {
-//                 alert("Freundschaftsanfrage erfolgreich gesendet!");
-//             } else {
-//                 alert("Fehler beim Senden der Anfrage.");
-//             }
-//         }
-//     };
-//     xmlhttp.open("GET", "ajax_load_friends.php", true); 
-//     xmlhttp.setRequestHeader("Content-type", "application/json");
-//     xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
-//     const payload = JSON.stringify({ username });
-//     xmlhttp.send();}
-
-// // Event-Listener für den Add-Button
-// document.querySelector(".greybuttonroundaction").addEventListener("click", () => {
-//     const input = document.getElementById("friend-request-name");
-//     const username = input.value.trim();
-//     sendFriendRequest(username);
-//     input.value = ""; // Inputfeld zurücksetzen
-// });
-
-// // Nutzer laden, sobald die Seite geladen ist
-// document.addEventListener("DOMContentLoaded", loadUsers);
+// Nutzer laden, sobald die Seite geladen ist
+document.addEventListener("DOMContentLoaded", loadUsers);
 
 
 //ab hier Aufgabe b2
@@ -104,7 +89,7 @@ function loadFriends() {
 
             acceptedFriends.forEach(friend => {
                  const li = document.createElement("li");
-                
+
 
                  // // Link für den Freund
                  const link = document.createElement("a");
@@ -112,7 +97,7 @@ function loadFriends() {
                  link.setAttribute("href", `chat.php?friend=${friend.username}`);
                  link.textContent = friend.username;
                  li.appendChild(link);
-                
+
 
                 // Span für ungelesene Nachrichten
                  if (friend.unread && friend.unread > 0) {
@@ -122,13 +107,13 @@ function loadFriends() {
                      li.appendChild(unreadP);
                  }
 
-                
+
                 friendListContainer.appendChild(li);
             });
 
             console.log("Freundesliste aktualisiert:", acceptedFriends);
 
-            
+
             //Freundschaftsanfragen aktualisieren
             const requestsContainer = document.querySelector("ol");
             requestsContainer.innerHTML = ""; // Alte Anfragen löschen
@@ -145,28 +130,28 @@ function loadFriends() {
                 usernameSpan.textContent = request.username;
                 usernameSpan.classList.add("bold");
 
-            
+
                 li.appendChild(textBefore);
                 li.appendChild(usernameSpan);
-        
+
                 // Buttons für "Accept" und "Reject"
                 const acceptLink = document.createElement("a");
                 acceptLink.href = `friends.php?action=accept&friend=${encodeURIComponent(request.username)}`;
                 acceptLink.classList.add("acceptbutton");
                 acceptLink.textContent = "Accept";
-                
-        
+
+
                 const rejectLink = document.createElement("a");
                 rejectLink.href = `friends.php?action=reject&friend=${encodeURIComponent(request.username)}`;
                 rejectLink.classList.add("rejectbutton");
                 rejectLink.textContent = "Reject";
-                
-        
+
+
                 li.appendChild(acceptLink);
                 li.appendChild(rejectLink);
                 requestsContainer.appendChild(li);
             });
-        
+
             console.log("Freundschaftsanfragen aktualisiert:", requests);
         }
     };
@@ -179,4 +164,3 @@ window.setInterval(() => {
 }, 
 1000
 );
-loadFriends();

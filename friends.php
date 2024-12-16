@@ -7,8 +7,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-
-$error = null;
+$error = "";
 
 // Query-Parameter verarbeiten
 if (isset($_GET['action']) && isset($_GET['friend'])) {
@@ -31,6 +30,8 @@ if (isset($_GET['action']) && isset($_GET['friend'])) {
 }
 
 
+
+
 try {
     // Freunde und Freundschaftsanfragen laden
     $friends = $service->loadFriends();
@@ -47,6 +48,11 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Friends</title>
     <link rel="stylesheet" href="style.css">
+
+    <script>
+    const currentUser = <?= json_encode($_SESSION['user']); ?>;
+</script>
+
 </head>
 <body>
 
@@ -55,7 +61,7 @@ try {
     <div class="content">
         <h1 class="left">Friends</h1>
         <a class="logout" href="logout.php">&lt; Logout</a> |
-        <a class="text" href="Login.html">Settings</a>
+        <a class="text" href="Login.php">Settings</a>
         <hr>
 
         <!-- Freundeliste -->
@@ -77,14 +83,20 @@ try {
         <ol>
         </ol>
         <hr>
-        <form>
+        <form method= "post" action="friends.php" >
             <div class="bar">
                 <input 
                     class="actionbar" placeholder="Add Friend to List" name="friendRequestName" id="friend-request-name" list="friend-selector">
                 <datalist id="friend-selector"> 
+                <?php foreach ($usersList as $user): ?>
+                        <option value="<?= htmlspecialchars($user['username']) ?>">
+                            <?= htmlspecialchars($user['username']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                
                     
                 </datalist>
-                <button type="button" class="greybuttonroundaction">Add</button>
+                <button type="submit" class="greybuttonroundaction">Add</button>
             </div>
         </form>
     </div>
@@ -92,3 +104,4 @@ try {
     
 </body>
 </html>
+
