@@ -19,15 +19,30 @@ function updateMessages(messages) {
     // Mit klassischer for-Schleife durch die Nachrichten iterieren
     for (let i = 0; i < messages.length; i++) {
         const msg = messages[i];
+
+        // Neues Element für die Nachricht erzeugen
         const li = document.createElement('li');
         li.className = "chat-item";
-        li.innerHTML = `
-            <div class="message-content">
-                <span class="message-time">${msg.time}</span>
-                <span class="bold">${msg.from}:</span>
-                ${msg.msg}
-            </div>
-        `;
+
+        // Absender
+        const from = document.createElement('span');
+        from.className = "bold";
+        from.textContent = `${msg.from}:`;
+
+        // Zeitstempel
+        const time = document.createElement('span');
+        time.className = "message-time";
+        time.textContent = msg.time;
+
+        // Nachricht
+        const content = document.createElement('span');
+        content.textContent = msg.msg;
+
+        // Struktur aufbauen
+        li.appendChild(time);
+        li.appendChild(from);
+        li.appendChild(content);
+
         messageList.appendChild(li);
     }
 }

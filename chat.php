@@ -68,9 +68,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
         <p>No messages yet.</p>
         <?php else: ?>
         <?php for ($i = 0; $i < count($messages); $i++): ?>
-         <li class="chat-item">
+         <li class="message-content">
     <div class="message-content">  <?php
-    // Zeitstempel in Sekunden umwandeln, falls Millisekunden
             $timestamp = intval($messages[$i]->time);
             if (strlen((string)$timestamp) > 10) {
             $timestamp = intval($timestamp / 1000);
