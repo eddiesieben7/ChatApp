@@ -2,7 +2,7 @@
 require("start.php");
 
 // Wenn der Nutzer bereits angemeldet ist, zur Freundesliste weiterleiten
-if (isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']['username'])) {
     header("Location: friends.php");
     exit();
 }

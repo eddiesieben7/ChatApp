@@ -3,8 +3,8 @@
 // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
 //const currentUser = "Tom"; // Der aktuell eingeloggte Benutzer
 
-// Nutzer aus der Freundesliste extrahieren
-const friendList = Array.from(document.querySelectorAll(".friendlist .listitems")).map(el => el.textContent);
+// Nutzer aus der Freundesliste extrahieren und in ein Array von Benutzernamen umwandeln
+const friendList = Array.from(document.querySelectorAll(".friendlist .listitems")).map(el => el.textContent.trim());
 
 // Funktion, um Nutzer vom Backend zu laden
 function loadUsers() {
@@ -26,7 +26,7 @@ function populateDatalist(users) {
     datalist.innerHTML = ""; // Alte Einträge löschen
 
     // Filtere den aktuellen Benutzer aus
-    const allowedUsers = users.filter(user => user !== currentUser);
+    const allowedUsers = users.filter(user => user !== currentUser && !friendList.includes(user));
 
     allowedUsers.forEach(user => {
         const option = document.createElement("option");
