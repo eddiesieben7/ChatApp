@@ -16,7 +16,7 @@ $error = "";
 // Query-Parameter verarbeiten
 if (isset($_GET['action']) && isset($_GET['friend'])) {
     $action = $_GET['action'];
-    $friend = $_GET['friend'];
+    $friend = htmlspecialchars($_GET['friend']);
 
     try {
         if ($action === 'accept') {

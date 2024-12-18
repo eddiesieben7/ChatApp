@@ -1,19 +1,22 @@
 <?php
 require("start.php");
 
+$error = ""; // Variable zur Speicherung von Fehlermeldungen
+
 // Überprüfen, ob der Nutzer angemeldet ist
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']['username'])) {
     header("Location: login.php");
     exit();
 }
 
+$currentUser = $_SESSION['user']['username']; // Aktueller Benutzer
+$chatPartner = htmlspecialchars($_GET['friend'] ?? '');
+
 // Chat-Partner prüfen
-if (!isset($_GET['friend']) || empty($_GET['friend'])) {
+if (empty($chatPartner)) {
     header("Location: friends.php");
     exit();
 }
-
-$chatPartner = htmlspecialchars($_GET['friend']);
 
 // Freund entfernen
 if (isset($_GET['action']) && $_GET['action'] === 'remove-friend') {
@@ -21,7 +24,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'remove-friend') {
         header("Location: friends.php");
         exit();
     } else {
-        die("Failed to remove friend.");
+        $error = "Failed to remove friend.";
     }
 }
 
@@ -31,19 +34,25 @@ try {
     // Nachrichten laden
     $messages = $service->loadMessages($chatPartner);
 } catch (Exception $e) {
-    die("Error loading messages: " . $e->getMessage());
+    $error = "Error loading messages: " . $e->getMessage();
 }
 
 // Nachricht senden
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
     $messageContent = trim($_POST['message']);
     if (!empty($messageContent)) {
-        $service->sendMessage((object)[
-            "msg" => $messageContent,
-            "to" => $chatPartner
-        ]);
-        header("Location: chat.php?friend=" . urlencode($chatPartner));
-        exit();
+        try {
+            $service->sendMessage((object)[
+                "msg" => $messageContent,
+                "to" => $chatPartner
+            ]);
+            header("Location: chat.php?friend=" . urlencode($chatPartner));
+            exit();
+        } catch (Exception $e) {
+            $error = "Error sending message: " . $e->getMessage();
+        }
+    } else {
+        $error = "Message cannot be empty.";
     }
 }
 ?>
@@ -66,32 +75,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
                Remove Friend
             </a>
         </div>
+        <?php if (!empty($error)): ?>
+            <p class="error"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
         <hr>
         <div class="chat">
-    <ul class="message-list">
-        <?php if (count($messages) === 0): ?>
-            <li class="chat-item">
-                <div class="message-content">No messages yet.</div>
-            </li>
-        <?php else: ?>
-            <?php for ($i = 0; $i < count($messages); $i++): ?>
-                <li class="chat-item">
-                    <div class="message-content">
-                        <?php
-                        $timestamp = intval($messages[$i]->time);
-                        if (strlen((string)$timestamp) > 10) {
-                            $timestamp = intval($timestamp / 1000);
-                        }
-                        ?>
-                        <span class="message-time"><?= date("d.m.Y | H:i", $timestamp) ?></span>
-                        <span class="bold"><?= htmlspecialchars($messages[$i]->from) ?>:</span>
-                        <?= htmlspecialchars($messages[$i]->msg) ?>
-                    </div>
-                </li>
-            <?php endfor; ?>
-        <?php endif; ?>
-    </ul>
-</div>
+            <ul class="message-list">
+                <?php if (count($messages) === 0): ?>
+                    <li class="chat-item">
+                        <div class="message-content">No messages yet.</div>
+                    </li>
+                <?php else: ?>
+                    <?php foreach ($messages as $message): ?>
+                        <li class="chat-item">
+                            <div class="message-content">
+                                <?php
+                                $timestamp = intval($message->time);
+                                if (strlen((string)$timestamp) > 10) {
+                                    $timestamp = intval($timestamp / 1000);
+                                }
+                                ?>
+                                <span class="message-time"><?= date("d.m.Y | H:i", $timestamp) ?></span>
+                                <span class="bold"><?= htmlspecialchars($message->from) ?>:</span>
+                                <?= htmlspecialchars($message->msg) ?>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+        </div>
         <hr>
         <form method="POST" action="chat.php?friend=<?= urlencode($chatPartner) ?>" class="chat-form">
             <div class="bar">

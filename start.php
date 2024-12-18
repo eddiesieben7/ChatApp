@@ -10,7 +10,9 @@ spl_autoload_register(function ($class_name) {
 });
 
 // Session starten
+if (session_status() === PHP_SESSION_NONE) {
 session_start();
+}
 
 // Backend-Konfiguration
 define('CHAT_SERVER_URL', 'https://online-lectures-cs.thi.de/chat/');

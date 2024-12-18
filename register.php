@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         // Wenn alle Eingaben korrekt sind, Benutzer registrieren
         if ($service->register($username, $password)) {
-            $_SESSION['user'] = $username; // Benutzername in der Session speichern
+            $_SESSION['user'] = ['username' => $username]; // Benutzername in der Session speichern
             header("Location: friends.php"); // Weiterleitung zur Freundesliste
             exit();
         } else {

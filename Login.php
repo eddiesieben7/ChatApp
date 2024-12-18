@@ -1,33 +1,37 @@
 <?php
 require("start.php");
 
-// Wenn der Nutzer bereits angemeldet ist, zur Freundesliste weiterleiten
-if (!isset($_SESSION['user']['username'])) {
+$error = ""; // Fehlernachricht
+
+// Überprüfen, ob der Benutzer bereits eingeloggt ist
+if (isset($_SESSION['user']['username'])) {
     header("Location: friends.php");
     exit();
 }
 
-
-
-$error = "";
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
 
-    if (!empty($username) && !empty($password)) {
-        if ($service->login($username, $password)) {
-            $_SESSION['user'] = ['username' => $username];  // Speichere ein Array in der Session
-            header("Location: friends.php");
-            exit();
-        }
-        } else {
-            $error = "Invalid username or password.";
-        }
-    } else {
+    if (empty($username) || empty($password)) {
         $error = "Please fill in all fields.";
+    } else {
+        // Versuche den Benutzer einzuloggen
+        try {
+            if ($service->login($username, $password)) {
+                $_SESSION['user'] = ['username' => $username]; // Benutzer speichern
+                header("Location: friends.php");
+                exit();
+            } else {
+                $error = "Invalid username or password.";
+                error_log("Login failed for user: $username");
+            }
+        } catch (Exception $e) {
+            $error = "Login error: " . $e->getMessage();
+            error_log("Login error: " . $e->getMessage());
+        }
     }
-
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,29 +43,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
     <div class="content">
-    <img src="images/chat.png" class="images" alt="Chat Icon">
+        <img src="images/chat.png" class="images" alt="Chat Icon">
         <h1 class="center">Please sign in</h1>
 
         <?php if (!empty($error)): ?>
             <p class="error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
+
         <form method="POST" action="login.php" class="form">
-            
-
             <fieldset class="login">
-            <legend>Login</legend>
-            <div class = "formcontent">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Username" required><br>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            </div>
+                <legend>Login</legend>
+                <div class="formcontent">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                    <br>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
             </fieldset>
-
-            <div class= "extrabuttons">
-
-            <a href="register.php" class="greyroundbutton">Register</a> 
-            <button type="submit" class="blueroundbutton">Login</button>
+            <div class="extrabuttons">
+                <a href="register.php" class="greyroundbutton">Register</a>
+                <button type="submit" class="blueroundbutton">Login</button>
             </div>
         </form>
     </div>
