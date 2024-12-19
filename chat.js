@@ -96,3 +96,8 @@ if (document.querySelector('.chat-area')) {
         }
     });
 }
+window.setInterval(() => {
+    loadMessages();
+ }, 
+ 1000
+ );
