@@ -71,8 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </fieldset>
 
         <div class="extrabuttons">
-            <a href="login.php" class="greyroundbutton">Cancel</a>
-            <button type="submit" class="blueroundbutton">Create Account</button>
+            <a href="login.php" class="greyroundbutton" >Cancel</a>
+            <button type="submit" class="blueroundbutton" id="register-button" >Create Account</button>
         </div>
     </form>
 </div>
