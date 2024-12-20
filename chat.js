@@ -8,62 +8,77 @@ function getChatPartner() {
     return url.searchParams.get("friend") || "Unknown";
 }
 
-// Nachrichten aktualisieren
+// Nachrichten aktualisieren und in die Nachrichtenliste einfügen
 function updateMessages(messages) {
     const messageList = document.querySelector('.message-list');
     if (!messageList) return;
 
-    // Nachrichtenliste leeren
-    messageList.innerHTML = "";
+    const existingMessages = Array.from(messageList.children).map(
+        (msg) => msg.dataset.messageId
+    );
 
-    // Mit klassischer for-Schleife durch die Nachrichten iterieren
-    for (let i = 0; i < messages.length; i++) {
-        const msg = messages[i];
+    let newMessagesAdded = false;
 
-        // Neues Element für die Nachricht erzeugen
-        const li = document.createElement('li');
-        li.className = "chat-item";
+    messages.forEach((msg) => {
+        if (!existingMessages.includes(msg.id)) {
+            const li = document.createElement('li');
+            li.className = 'chat-item';
+            li.dataset.messageId = msg.id;
 
-        // Absender
-        const from = document.createElement('span');
-        from.className = "bold";
-        from.textContent = `${msg.from}:`;
+            const time = document.createElement('span');
+            time.className = 'message-time';
+            time.textContent = new Date(msg.time).toLocaleString();
 
-        // Zeitstempel
-        const time = document.createElement('span');
-        time.className = "message-time";
-        time.textContent = msg.time;
+            const from = document.createElement('span');
+            from.className = 'bold';
+            from.textContent = `${msg.from}: `;
 
-        // Nachricht
-        const content = document.createElement('span');
-        content.textContent = msg.msg;
+            const content = document.createElement('span');
+            content.textContent = msg.msg;
 
-        // Struktur aufbauen
-        li.appendChild(time);
-        li.appendChild(from);
-        li.appendChild(content);
+            li.appendChild(time);
+            li.appendChild(from);
+            li.appendChild(content);
+            messageList.appendChild(li);
 
-        messageList.appendChild(li);
+            newMessagesAdded = true;
+        }
+    });
+
+    if (newMessagesAdded) {
+        messageList.scrollTop = messageList.scrollHeight; // Zum Ende scrollen
     }
 }
 
+
 // Nachrichten laden
 function loadMessages() {
-    const chatPartner = getChatPartner();
-    const xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            try {
-                const messages = JSON.parse(xmlhttp.responseText);
-                updateMessages(messages);
-            } catch (e) {
-                console.error("Error parsing messages:", e);
+    const chatPartner = new URLSearchParams(window.location.search).get('friend');
+    console.log("Fetching messages for:", chatPartner); // Debug-Ausgabe
+
+    fetch(`ajax_load_messages.php?to=${encodeURIComponent(chatPartner)}`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        }
-    };
-    xmlhttp.open("GET", `ajax_load_messages.php?to=${chatPartner}`, true);
-    xmlhttp.send();
+            return response.json();
+        })
+        .then((messages) => {
+            console.log("Messages loaded:", messages); // Debug-Ausgabe
+            updateMessages(messages);
+        })
+        .catch((error) => {
+            console.error("Error loading messages:", error); // Fehlerausgabe
+        });
 }
+
+// Automatische Aktualisierung alle 1 Sekunde
+setInterval(loadMessages, 1000);
+
+// Initialer Aufruf beim Laden der Seite
+document.addEventListener("DOMContentLoaded", () => {
+    loadMessages();
+});
 
 // Nachricht senden
 function sendMessage(content) {
