@@ -72,12 +72,10 @@ function loadMessages() {
         });
 }
 
-// Automatische Aktualisierung alle 1 Sekunde
-setInterval(loadMessages, 1000);
-
 // Initialer Aufruf beim Laden der Seite
 document.addEventListener("DOMContentLoaded", () => {
-    loadMessages();
+    loadMessages(); // Nachrichten initial laden
+    window.setInterval(loadMessages, 1000); // Nachrichten alle 1 Sekunde aktualisieren
 });
 
 // Nachricht senden
@@ -88,20 +86,18 @@ function sendMessage(content) {
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            loadMessages(); // Nachrichten neu laden
+            // Erfolgreiches Senden, keine Notwendigkeit für erneutes Laden hier,
+            // da es alle 1 Sekunde automatisch aktualisiert wird
         }
     };
     xmlhttp.send(JSON.stringify({ to: chatPartner, message: content }));
 }
 
-// Initialisierung
+// Initialisierung für die Chat-Oberfläche
 if (document.querySelector('.chat-area')) {
     const chatPartner = getChatPartner();
     const chatHeader = document.querySelector('h1.left');
     if (chatHeader) chatHeader.textContent = `Chat with ${chatPartner}`;
-    loadMessages(); // Nachrichten beim Laden der Seite abrufen
-    setInterval(loadMessages, 1000); // Nachrichten jede Sekunde aktualisieren
-
     document.querySelector('.greybuttonroundaction').addEventListener('click', function (e) {
         e.preventDefault();
         const input = document.getElementById('message-input');
