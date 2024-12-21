@@ -89,10 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
                                 <?php
                                 $timestamp = intval($msg->time);
                                 if (strlen((string)$timestamp) > 10) {
-                                    $timestamp = intval($timestamp / 1000);
-                                }
+                                    $timestamp = intval($timestamp / 1000); }
                                 ?>
-                                <span class="message-time"><?= date("d.m.Y | H:i", $timestamp) ?></span>
                                 <span class="bold"><?= htmlspecialchars($msg->from) ?>:</span>
                                 <?= htmlspecialchars($msg->msg) ?>
                             </div>
