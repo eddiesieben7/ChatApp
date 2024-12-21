@@ -19,7 +19,8 @@ function updateMessages(messages) {
 
     let newMessagesAdded = false;
 
-    messages.forEach((msg) => {
+    for (let i = 0; i < messages.length; i++) {
+        const msg = messages[i]; // Nachricht holen
         if (!existingMessages.includes(msg.id)) {
             const li = document.createElement('li');
             li.className = 'chat-item';
@@ -43,7 +44,7 @@ function updateMessages(messages) {
 
             newMessagesAdded = true;
         }
-    });
+    }
 
     if (newMessagesAdded) {
         messageList.scrollTop = messageList.scrollHeight; // Zum Ende scrollen
