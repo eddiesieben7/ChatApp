@@ -77,30 +77,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
         </div>
         <hr>
         <div class="chat">
-    <ul class="message-list">
-        <?php if (count($messages) === 0): ?>
-            <li class="chat-item">
-                <div class="message-content">No messages yet.</div>
-            </li>
-        <?php else: ?>
-            <?php for ($i = 0; $i < count($messages); $i++): ?>
-                <li class="chat-item">
-                    <div class="message-content">
-                        <?php
-                        $timestamp = intval($messages[$i]->time);
-                        if (strlen((string)$timestamp) > 10) {
-                            $timestamp = intval($timestamp / 1000);
-                        }
-                        ?>
-                        <span class="message-time"><?= date("d.m.Y | H:i", $timestamp) ?></span>
-                        <span class="bold"><?= htmlspecialchars($messages[$i]->from) ?>:</span>
-                        <?= htmlspecialchars($messages[$i]->msg) ?>
-                    </div>
-                </li>
-            <?php endfor; ?>
-        <?php endif; ?>
-    </ul>
-</div>
+            <ul class="message-list">
+                <?php if (count($messages) === 0): ?>
+                    <li class="chat-item">
+                        <div class="message-content">No messages yet.</div>
+                    </li>
+                <?php else: ?>
+                    <?php foreach ($messages as $msg): ?>
+                        <li class="chat-item">
+                            <div class="message-content">
+                                <?php
+                                $timestamp = intval($msg->time);
+                                if (strlen((string)$timestamp) > 10) {
+                                    $timestamp = intval($timestamp / 1000);
+                                }
+                                ?>
+                                <span class="message-time"><?= date("d.m.Y | H:i", $timestamp) ?></span>
+                                <span class="bold"><?= htmlspecialchars($msg->from) ?>:</span>
+                                <?= htmlspecialchars($msg->msg) ?>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+        </div>
         <hr>
         <form method="POST" action="chat.php?friend=<?= urlencode($chatPartner) ?>" class="chat-form">
             <div class="bar">
