@@ -61,10 +61,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="text-center">Chat with <?= htmlspecialchars($chatPartner) ?></h1>
-    <div class="d-flex justify-content-between mb-3">
+    <h1 class="text-left">Chat with <?= htmlspecialchars($chatPartner) ?></h1>
+    <div class="btn-group mb-3" role="group" aria-label="Link buttons">
         <a href="friends.php" class="btn btn-secondary">&lt; Back</a>
-        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeFriendModal">Remove Friend</button>
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeFriend">Remove Friend</button>
     </div>
     <ul class="list-group mb-3">
         <?php if (count($messages) === 0): ?>
@@ -86,8 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
     </form>
 </div>
 
-<!-- Remove Friend Modal -->
-<div class="modal fade" id="removeFriendModal" tabindex="-1" aria-labelledby="removeFriendModalLabel" aria-hidden="true">
+<div class="modal fade" id="removeFriend" tabindex="-1" aria-labelledby="removeFriendModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
