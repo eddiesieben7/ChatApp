@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
         <?php endif; ?>
     </ul>
     <form method="POST" action="chat.php?friend=<?= urlencode($chatPartner) ?>">
-        <div class="input-group">
+        <div class="input-group mb-3">
             <input type="text" name="message" class="form-control" placeholder="New Message" required>
             <button class="btn btn-primary" type="submit">Send</button>
         </div>
