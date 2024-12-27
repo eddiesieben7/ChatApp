@@ -69,7 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </form>
 </div>
 <script>
-    // Client-side validation using Bootstrap classes
     (function () {
         'use strict';
         const forms = document.querySelectorAll('.needs-validation');
@@ -79,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     event.preventDefault();
                     event.stopPropagation();
                 }
-                form.classList.add('was-validated');
+                form.classList.add('validated');
             }, false);
         });
     })();
