@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label for="confirm_password">Confirm Password</label>
             <div class="invalid-feedback">Passwords must match.</div>
         </div>
-        <div class="d-flex justify-content-between">
+        <div class="btn-group">
             <a href="login.php" class="btn btn-secondary">Cancel</a>
             <button type="submit" class="btn btn-primary">Register</button>
         </div>

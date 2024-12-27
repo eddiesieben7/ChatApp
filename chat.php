@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
 <body>
 <div class="container mt-5">
     <h1 class="text-left">Chat with <?= htmlspecialchars($chatPartner) ?></h1>
-    <div class="btn-group mb-3" role="group" aria-label="Link buttons">
+    <div class="btn-group mb-3">
         <a href="friends.php" class="btn btn-secondary">&lt; Back</a>
         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeFriend">Remove Friend</button>
     </div>
