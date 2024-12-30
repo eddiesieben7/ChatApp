@@ -41,33 +41,47 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="text-left">Register</h1>
+
+<div class="container-md mt-3 text-center">
+
+    <img src="images/user.png" class="rounded-circle " alt="User Icon" style= "width: 150px; height: 150px;">
+
+    <h1 class="text-center m-3">Register</h1>
+
     <?php if (!empty($error)): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
-    <form method="POST" action="register.php" class="needs-validation" novalidate>
+
+    <div class="d-flex justify-content-center">
+
+    <form method="POST" action="register.php" class="needs-validation w-50" novalidate>
+
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
             <label for="username">Username</label>
             <div class="invalid-feedback">Username must be at least 3 characters long.</div>
         </div>
+
         <div class="form-floating mb-3">
             <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
             <label for="password">Password</label>
             <div class="invalid-feedback">Password must be at least 8 characters long.</div>
         </div>
+
         <div class="form-floating mb-3">
             <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
             <label for="confirm_password">Confirm Password</label>
             <div class="invalid-feedback">Passwords must match.</div>
         </div>
-        <div class="btn-group">
+
+        <div class="btn-group btn-group-lg">
             <a href="login.php" class="btn btn-secondary">Cancel</a>
             <button type="submit" class="btn btn-primary">Register</button>
         </div>
     </form>
 </div>
+</div>
+
 <script>
     (function () {
         'use strict';
