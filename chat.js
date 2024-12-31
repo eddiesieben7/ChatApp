@@ -1,4 +1,3 @@
-
 const backendUrl = "https://online-lectures-cs.thi.de/chat/ba1ad2f8-7e88-4ce4-92c2-6399ab16f647";
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVG9tIiwiaWF0IjoxNzMyMzkwOTQwfQ.DQA6mSt-oo4qPZ0N09zS2W6Cd_2g4BJpn4qL_zr24dw";
 
@@ -17,15 +16,15 @@ function updateMessages(messages) {
     messageList.innerHTML = ''; 
 
     if (messages.length === 0) {
-
+       
         const noMessagesItem = document.createElement('li');
         noMessagesItem.id = "no-messages"; 
         noMessagesItem.className = 'list-group-item text-center';
         noMessagesItem.textContent = 'No messages yet.';
         messageList.appendChild(noMessagesItem);
     } else {
-
-    messages.forEach((msg) => {
+       
+        messages.forEach((msg) => {
         const messageKey = `${msg.from}-${msg.msg}-${msg.time}`;
 
         const li = document.createElement('li');
@@ -93,13 +92,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const input = document.querySelector('input[name="message"]');
     const form = document.querySelector('form');
     if (form && input) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const messageContent = input.value.trim();
-            if (messageContent) {
-                sendMessage(messageContent);
-                input.value = ""; 
-            }
-        });
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const messageContent = input.value.trim();
+        if (messageContent) {
+            sendMessage(messageContent);
+            input.value = ""; 
+        }
+    });
     }
 });
