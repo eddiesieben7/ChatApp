@@ -75,7 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeFriend">Remove Friend</button>
     </div>
 
-<<<<<<< HEAD
 <ul id=message-list class="list-group mb-3">
     <?php if (count($messages) === 0): ?>
     <li id= no-messages class="list-group-item text-center">No messages yet.</li>
@@ -102,11 +101,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
 </form>
 </div>
 
-<div class="modal fade" id="removeFriend" tabindex="-1" aria-labelledby="removeFriendModalLabel" aria-hidden="true">
+<div class="modal fade" id="removeFriend" tabindex="-1" aria-labelledby="removeFriendModal" aria-hidden="true">
 <div class="modal-dialog">
 <div class="modal-content">
 <div class="modal-header">
-    <h5 class="modal-title" id="removeFriendModalLabel">Remove Friend</h5>
+    <h5 class="modal-title" id="removeFriendModal">Remove Friend</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
@@ -116,54 +115,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['message'])) {
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
     <a href="chat.php?action=remove-friend&friend=<?= urlencode($chatPartner) ?>" class="btn btn-danger">Remove</a>
 </div>
-=======
-
-<ul id=message-list class="list-group mb-3">
-<?php if (count($messages) === 0): ?>
-<li id= no-messages class="list-group-item text-center">No messages yet.</li>
-<?php else: ?>
-<?php foreach ($messages as $msg): ?>
-<li id=message-content class="list-group-item d-flex justify-content-between align-items-start">
-
-<div>
-<span id=message-sender class="fw-bold"><?= htmlspecialchars($msg->from) ?>:</span>
-<?= htmlspecialchars($msg->msg) ?>
-</div>
-
-<div
-span id=message-dateandtime class="text-muted"><?= date("H:i | d.m.Y", intval($msg->time / 1000)) ?></>
-</div>
-</li>
-<?php endforeach; ?>
-<?php endif; ?>
-    </ul>
-
-<form method="POST" action="chat.php?friend=<?= urlencode($chatPartner) ?>">
-    <div class="input-group mb-3">
-        <input type="text" name="message" class="form-control" placeholder="New Message" required>
-        <button class="btn btn-primary" type="submit">Send</button>
-    </div>
-    </form>
-    </div>
-
-<div class="modal fade" id="removeFriend" tabindex="-1" aria-labelledby="removeFriendModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title" id="removeFriendModalLabel">Remove Friend</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-        Are you sure you want to remove <?= htmlspecialchars($chatPartner) ?> as a friend?
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <a href="chat.php?action=remove-friend&friend=<?= urlencode($chatPartner) ?>" class="btn btn-danger">Remove</a>
-    </div>
->>>>>>> af7a2badbcc92e4fb0aa42226212dd430a2c0779
 </div>
 </div>
 </div>
 
 </body>
 </html>
+
