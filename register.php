@@ -40,11 +40,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
+<body class="bg-light">
 
 <div class="container-md mt-3 text-center">
 
 <img src="images/user.png" class="rounded-circle " alt="User Icon" style= "width: 150px; height: 150px;">
+<div class="container-sm bg-white mt-5 border border-gray-500 p-5 w-50 ">
 
 <h1 class="text-center m-3">Register</h1>
 
@@ -74,9 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="invalid-feedback">Passwords must match.</div>
     </div>
 
-    <div class="btn-group btn-group-lg">
-        <a href="login.php" class="btn btn-secondary">Cancel</a>
-        <button type="submit" class="btn btn-primary">Register</button>
+    <div class="d-flex justify-content-between">
+        <a href="login.php" class="btn btn-secondary w-50 rounded-0 rounded-start">Cancel</a>
+        <button type="submit" class="btn btn-primary w-50 rounded-0 rounded-end">Register</button>
     </div>
 </form>
 </div>
