@@ -1,25 +1,25 @@
 const backendURL = "ajax_check_user.php";
-// Funktion zur Prüfung, ob der Benutzername existiert
+
 function userExists(name) {
     return new Promise((resolve, reject) => {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 204) {
-                    resolve(true); // Benutzername existiert
-                } else if (xmlhttp.status == 404) {
-                    resolve(false); // Benutzername verfügbar
-                } else {
-                    reject(new Error('Request failed with status ' + xmlhttp.status));
-                }
+        if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status == 204) {
+                resolve(true); 
+            } else if (xmlhttp.status == 404) {
+                resolve(false); 
+            } else {
+                reject(new Error('Request failed with status ' + xmlhttp.status));
             }
+        }
         };
         let url = `${backendURL}?user=${encodeURIComponent(name)}`;
         xmlhttp.open("GET", url, true);
         xmlhttp.send();
     });
 }
-// Event-Listener für die Formularvalidierung
+
 window.onload = function () {
     const usernameInput = document.querySelector('input[name="username"]');
     const passwordInput = document.querySelector('input[name="password"]');
@@ -52,7 +52,7 @@ window.onload = function () {
         const password = passwordInput.value.trim();
         const confirmPassword = confirmInput.value.trim();
         let valid = true;
-        // Lokale Validierungen
+        
         if (username.length < 3) {
             alert('Username must be at least 3 characters long.');
             valid = false;
@@ -65,7 +65,7 @@ window.onload = function () {
             alert('Passwords do not match!');
             valid = false;
         }
-        // Überprüfung, ob der Benutzername existiert
+       
         if (valid) {
             try {
                 const userExistsResult = await userExists(username);
@@ -79,7 +79,7 @@ window.onload = function () {
                 valid = false;
             }
         }
-        // Registrierung abschicken, wenn alles gültig ist
+    
         if (valid) {
             document.getElementById('register-form').submit();
         } else {
