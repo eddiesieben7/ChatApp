@@ -57,50 +57,79 @@ try {
 </script>
 
 </head>
-<body>
+<body class="bg-light">
 
 
 
-    <div class="content">
-    <h1 class="left">
+<div class="container-md mt-3 ">
+        <h1 class="left">
             <?= htmlspecialchars($_SESSION['user']['username']) ?>'s Friends
         </h1>
-        <a class="logout" href="logout.php">&lt; Logout</a> |
-        <a class="text" href="Login.php">Settings</a>
+
+        <div class="btn-group btn-group-sm mb-3 mt-2 ">
+        <a class="btn btn-secondary fs-6" href="logout.php">&lt; Logout</a> 
+        <a class="btn btn-secondary fs-6" href="Login.php">Settings</a>
+        </div>
         <hr>
 
         <!-- Freundeliste -->
-        <div class="friendlist">
+        
             
-            <ul>
+            <ul class= "list-group list">
                
                         <li class="friend-item">
                             
                         </li>
                     
             </ul>
-        </div>
+        
 
         <!-- Freundschaftsanfragen -->
         	
         <hr>
         <h2 class="left">New Requests</h2>
-        <ol>
+        <ol class="list-group list">
+        
         </ol>
+
+
         <hr>
         <form method= "post" action="friends.php" >
-            <div class="bar">
+            <div class="input-group mb-3">
                 <input 
-                    class="actionbar" placeholder="Add Friend to List" name="friendRequestName" id="friend-request-name" list="friend-selector">
+                    class="form-control" placeholder="Add Friend to List" name="friendRequestName" id="friend-request-name" list="friend-selector">
                 <datalist id="friend-selector"> 
                 
                 
                     
                 </datalist>
-                <button type="submit" class="greybuttonroundaction">Add</button>
+                <button type="submit" class="btn btn-primary">Add</button>
             </div>
         </form>
+
+        <!-- Modal für Freundschaftsanfragen -->
+<!-- Modal -->
+<div class="modal" tabindex="-1" id="friendRequestModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="friendModalTitle">Friend Request</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="friendModalBody">
+        <!-- Inhalt wird dynamisch durch JavaScript geladen -->
+      </div>
+      <div class="modal-footer" id="friendModalFooter">
+        <!-- Buttons für Accept und Reject werden hier hinzugefügt -->
+      </div>
     </div>
+  </div>
+</div>
+
+
+    </div>
+
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>   
     <script src="friends.js"></script> 
     

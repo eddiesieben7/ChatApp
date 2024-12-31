@@ -4,7 +4,7 @@
 //const currentUser = "Tom"; // Der aktuell eingeloggte Benutzer
 
 // Nutzer aus der Freundesliste extrahieren und in ein Array von Benutzernamen umwandeln
-const friendList = Array.from(document.querySelectorAll(".friendlist .listitems")).map(el => el.textContent.trim());
+const friendList = Array.from(document.querySelectorAll(".list .list-group-item")).map(el => el.textContent.trim());
 
 // Funktion, um Nutzer vom Backend zu laden
 function loadUsers() {
@@ -59,7 +59,7 @@ function sendFriendRequest(username) {
 }
 
 // Event-Listener für den Add-Button
-document.querySelector(".greybuttonroundaction").addEventListener("click", () => {
+document.querySelector(".btn-primary").addEventListener("click", () => {
     const input = document.getElementById("friend-request-name");
     const username = input.value.trim();
     sendFriendRequest(username);
@@ -84,28 +84,29 @@ function loadFriends() {
              const requests = data.filter(friend => friend.status === "requested");
 
              // Freundesliste aktualisieren
-             const friendListContainer = document.querySelector(".friendlist ul");
+             const friendListContainer = document.querySelector(".list");
             friendListContainer.innerHTML = ""; // Alte Liste löschen
 
             acceptedFriends.forEach(friend => {
                  const li = document.createElement("li");
+                 li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
 
 
                  // // Link für den Freund
                  const link = document.createElement("a");
-                 link.classList.add( "listitems");
+                 link.classList.add( "text-dark" ,"text-decoration-none", "fs-6");
                  link.setAttribute("href", `chat.php?friend=${friend.username}`);
                  link.textContent = friend.username;
                  li.appendChild(link);
 
 
                 // Span für ungelesene Nachrichten
-                 if (friend.unread && friend.unread > 0) {
-                    const unreadP = document.createElement("p");
-                    unreadP.classList.add("pnumber");
-                    unreadP.textContent = ` ${friend.unread}`;
-                     li.appendChild(unreadP);
-                 }
+                if (friend.unread && friend.unread > 0) {
+                    const badge = document.createElement("span");
+                    badge.classList.add("badge", "bg-primary", "rounded-pill", "fs-6");
+                    badge.textContent = friend.unread;
+                    li.appendChild(badge);
+                }
 
 
                 friendListContainer.appendChild(li);
@@ -121,35 +122,37 @@ function loadFriends() {
 
             requests.forEach(request => {
                 const li = document.createElement("li");
-                li.classList.add("listitems");
+                li.classList.add("list-group-item");
 
                 const textBefore = document.createTextNode("Friend Request from ");
 
                 // Span-Element für den Benutzernamen
                 const usernameSpan = document.createElement("span");
                 usernameSpan.textContent = request.username;
-                usernameSpan.classList.add("bold");
+                usernameSpan.classList.add("fw-bold" );
+                
+                
 
 
                 li.appendChild(textBefore);
                 li.appendChild(usernameSpan);
 
                 // Buttons für "Accept" und "Reject"
-                const acceptLink = document.createElement("a");
-                acceptLink.href = `friends.php?action=accept&friend=${encodeURIComponent(request.username)}`;
-                acceptLink.classList.add("acceptbutton");
-                acceptLink.textContent = "Accept";
+                // const acceptLink = document.createElement("a");
+                // acceptLink.href = `friends.php?action=accept&friend=${encodeURIComponent(request.username)}`;
+                // acceptLink.classList.add("btn-secondary");
+                // acceptLink.textContent = "Accept";
 
 
-                const rejectLink = document.createElement("a");
-                rejectLink.href = `friends.php?action=reject&friend=${encodeURIComponent(request.username)}`;
-                rejectLink.classList.add("rejectbutton");
-                rejectLink.textContent = "Reject";
+                // const rejectLink = document.createElement("a");
+                // rejectLink.href = `friends.php?action=reject&friend=${encodeURIComponent(request.username)}`;
+                // rejectLink.classList.add("btn-primary");
+                // rejectLink.textContent = "Reject";
 
 
-                li.appendChild(acceptLink);
-                li.appendChild(rejectLink);
-                requestsContainer.appendChild(li);
+                // li.appendChild(acceptLink);
+                // li.appendChild(rejectLink);
+                 requestsContainer.appendChild(li);
             });
 
             console.log("Freundschaftsanfragen aktualisiert:", requests);
@@ -158,6 +161,40 @@ function loadFriends() {
     xmlhttp.open("GET", "ajax_load_friends.php", true); 
     xmlhttp.send();
 }
+document.addEventListener("DOMContentLoaded", () => {
+    const requestsContainer = document.querySelector("ol");
+
+    requestsContainer.addEventListener("click", (event) => {
+        const target = event.target;
+
+        // Überprüfen, ob der Benutzername geklickt wurde
+        if (target.tagName === "SPAN" && target.classList.contains("fw-bold")) {
+            const username = target.textContent;
+
+            // Modal-Referenz
+            const modalElement = document.getElementById("friendRequestModal");
+            const modal = new bootstrap.Modal(modalElement);
+
+            // Modal-Titel setzen
+            document.getElementById("friendModalTitle").textContent = `Friend Request from ${username}`;
+
+            // Modal-Inhalt setzen
+            document.getElementById("friendModalBody").innerHTML = `<p>Accept or Reject <strong>${username}</strong>?</p>`;
+
+            // Modal-Footer mit Buttons befüllen
+            const footer = document.getElementById("friendModalFooter");
+            footer.innerHTML = `
+                <a href="friends.php?action=accept&friend=${encodeURIComponent(username)}" class="btn btn-secondary">Accept</a>
+                <a href="friends.php?action=reject&friend=${encodeURIComponent(username)}" class="btn btn-primary">Reject</a>
+            `;
+
+            // Modal anzeigen
+            modal.show();
+        }
+    });
+});
+
+
 
 window.setInterval(() => {
    loadFriends();
