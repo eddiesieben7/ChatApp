@@ -14,10 +14,18 @@ function updateMessages(messages) {
         return;
     }
 
-    messageList.innerHTML = '';
+    messageList.innerHTML = ''; 
 
-    messages.forEach((msg) => {
-      
+    if (messages.length === 0) {
+       
+        const noMessagesItem = document.createElement('li');
+        noMessagesItem.id = "no-messages"; 
+        noMessagesItem.className = 'list-group-item text-center';
+        noMessagesItem.textContent = 'No messages yet.';
+        messageList.appendChild(noMessagesItem);
+    } else {
+       
+        messages.forEach((msg) => {
         const messageKey = `${msg.from}-${msg.msg}-${msg.time}`;
 
         const li = document.createElement('li');
@@ -36,7 +44,8 @@ function updateMessages(messages) {
         li.appendChild(timeElement);
 
         messageList.appendChild(li);
-    });
+        });
+    }
 
     console.log("Messages updated.");
 }
@@ -84,13 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const input = document.querySelector('input[name="message"]');
     const form = document.querySelector('form');
     if (form && input) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const messageContent = input.value.trim();
-            if (messageContent) {
-                sendMessage(messageContent);
-                input.value = ""; 
-            }
-        });
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const messageContent = input.value.trim();
+        if (messageContent) {
+            sendMessage(messageContent);
+            input.value = ""; 
+        }
+    });
     }
 });
