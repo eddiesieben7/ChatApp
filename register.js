@@ -4,15 +4,15 @@ function userExists(name) {
     return new Promise((resolve, reject) => {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 204) {
-                    resolve(true); 
-                } else if (xmlhttp.status == 404) {
-                    resolve(false); 
-                } else {
-                    reject(new Error('Request failed with status ' + xmlhttp.status));
-                }
+        if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status == 204) {
+                resolve(true); 
+            } else if (xmlhttp.status == 404) {
+                resolve(false); 
+            } else {
+                reject(new Error('Request failed with status ' + xmlhttp.status));
             }
+        }
         };
         let url = `${backendURL}?user=${encodeURIComponent(name)}`;
         xmlhttp.open("GET", url, true);
