@@ -15,6 +15,7 @@ function updateMessages(messages) {
     }
 
     messageList.innerHTML = ''; 
+<<<<<<< HEAD
 
     if (messages.length === 0) {
        
@@ -26,6 +27,19 @@ function updateMessages(messages) {
     } else {
        
         messages.forEach((msg) => {
+=======
+
+    if (messages.length === 0) {
+
+        const noMessagesItem = document.createElement('li');
+        noMessagesItem.id = "no-messages"; 
+        noMessagesItem.className = 'list-group-item text-center';
+        noMessagesItem.textContent = 'No messages yet.';
+        messageList.appendChild(noMessagesItem);
+    } else {
+
+    messages.forEach((msg) => {
+>>>>>>> af7a2badbcc92e4fb0aa42226212dd430a2c0779
         const messageKey = `${msg.from}-${msg.msg}-${msg.time}`;
 
         const li = document.createElement('li');
@@ -54,21 +68,21 @@ function loadMessages2() {
     const chatPartner = getChatPartner();
     console.log("Fetching messages for:", chatPartner);
 
-    fetch(`ajax_load_messages.php?to=${encodeURIComponent(chatPartner)}`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then((messages) => {
-            console.log("Messages loaded:", messages);
+fetch(`ajax_load_messages.php?to=${encodeURIComponent(chatPartner)}`)
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then((messages) => {
+        console.log("Messages loaded:", messages);
 
-            updateMessages(messages);
-        })
-        .catch((error) => {
-            console.error("Error loading messages:", error);
-        });
+        updateMessages(messages);
+    })
+    .catch((error) => {
+        console.error("Error loading messages:", error);
+    });
 }
 
 function sendMessage(content) {
