@@ -28,7 +28,6 @@ if (isset($_GET['action']) && isset($_GET['friend'])) {
         $error = "Error processing request: " . $e->getMessage();
     }
 
-    // Nach der Verarbeitung zurück zur Hauptseite, um ein Neuladen der Aktionen zu verhindern
     header("Location: friends.php");
     exit();
 }
@@ -108,7 +107,7 @@ try {
         </form>
 
         <!-- Modal für Freundschaftsanfragen -->
-<!-- Modal -->
+
 <div class="modal" tabindex="-1" id="friendRequestModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -117,10 +116,10 @@ try {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="friendModalBody">
-        <!-- Inhalt wird dynamisch durch JavaScript geladen -->
+        <!-- Hier wird der Name des Freundes eingefügt -->
       </div>
       <div class="modal-footer" id="friendModalFooter">
-        <!-- Buttons für Accept und Reject werden hier hinzugefügt -->
+        <!-- Hier werden die Buttons eingefügt -->
       </div>
     </div>
   </div>

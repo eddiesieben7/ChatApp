@@ -8,32 +8,50 @@ const friendList = Array.from(document.querySelectorAll(".list .list-group-item"
 
 // Funktion, um Nutzer vom Backend zu laden
 function loadUsers() {
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            const data = JSON.parse(xmlhttp.responseText);
-            console.log("Alle Nutzer vom Backend:", data);
-            populateDatalist(data);
+    let xmlhttpUsers = new XMLHttpRequest();
+    xmlhttpUsers.onreadystatechange = function () {
+        if (xmlhttpUsers.readyState === 4 && xmlhttpUsers.status === 200) {
+            const allUsers = JSON.parse(xmlhttpUsers.responseText);
+
+            // Lade Freundesliste, um die Filterlogik anzuwenden
+            let xmlhttpFriends = new XMLHttpRequest();
+            xmlhttpFriends.onreadystatechange = function () {
+                if (xmlhttpFriends.readyState === 4 && xmlhttpFriends.status === 200) {
+                    const friendsData = JSON.parse(xmlhttpFriends.responseText);
+
+                    // Extrahiere akzeptierte Freunde
+                    const acceptedFriends = friendsData
+                        .filter(friend => friend.status === "accepted")
+                        .map(friend => friend.username);
+
+                    // Filtere die Benutzerliste
+                    const allowedUsers = allUsers.filter(
+                        user => user !== currentUser && !acceptedFriends.includes(user)
+                    );
+
+                    // Aktualisiere die Datalist
+                    populateDatalist(allowedUsers);
+                }
+            };
+            xmlhttpFriends.open("GET", "ajax_load_friends.php", true);
+            xmlhttpFriends.send();
         }
     };
-    xmlhttp.open("GET", "ajax_load_users.php", true); 
-    xmlhttp.send();
+    xmlhttpUsers.open("GET", "ajax_load_users.php", true);
+    xmlhttpUsers.send();
 }
 
-// Funktion, um datalist mit erlaubten Nutzern zu befüllen
 function populateDatalist(users) {
     const datalist = document.getElementById("friend-selector");
     datalist.innerHTML = ""; // Alte Einträge löschen
 
-    // Filtere den aktuellen Benutzer aus
-    const allowedUsers = users.filter(user => user !== currentUser && !friendList.includes(user));
-
-    allowedUsers.forEach(user => {
+    users.forEach(user => {
         const option = document.createElement("option");
         option.value = user;
         datalist.appendChild(option);
     });
 }
+
 
 // Funktion, um eine Freundschaftsanfrage zu erstellen
 function sendFriendRequest(username) {
@@ -161,6 +179,8 @@ function loadFriends() {
     xmlhttp.open("GET", "ajax_load_friends.php", true); 
     xmlhttp.send();
 }
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const requestsContainer = document.querySelector("ol");
 
@@ -188,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <a href="friends.php?action=reject&friend=${encodeURIComponent(username)}" class="btn btn-primary">Reject</a>
             `;
 
-            // Modal anzeigen
+            
             modal.show();
         }
     });
